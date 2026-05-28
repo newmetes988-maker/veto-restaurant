@@ -2,11 +2,13 @@ services:
   - type: web
     name: veto-api
     runtime: node
-    buildCommand: npm install && cd client && npm install && npm run build
+    buildCommand: ./build.sh
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 18
       - key: PORT
         value: 10000
       - key: DATABASE_URL
