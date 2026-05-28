@@ -186,7 +186,8 @@ const updateReservationStatus = async (reservationId, newStatus, adminUserId, re
 
     // Generate QR when confirming
     if (newStatus === 'confirmed') {
-      const qr = await qrService.generateReservationQR(reservationId);
+      const qrBaseUrl = baseUrl || env.PUBLIC_BASE_URL || 'http://localhost:3000';
+      const qr = await qrService.generateReservationQR(reservationId, qrBaseUrl);
       qrCode = qr.token;
       qrDataUri = qr.qrDataUri;
     }

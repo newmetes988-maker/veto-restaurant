@@ -16,9 +16,10 @@ if (!fs.existsSync(QR_DIR)) {
  * Generate a unique QR code for a reservation.
  * Saves PNG to disk and returns both token and public URL.
  */
-const generateReservationQR = async (reservationId) => {
+const generateReservationQR = async (reservationId, baseUrl) => {
   const token = uuidv4();
-  const checkInUrl = `${env.PUBLIC_BASE_URL}/api/v1/check-in/${token}`;
+  const publicBase = baseUrl || env.PUBLIC_BASE_URL || 'http://localhost:3000';
+  const checkInUrl = `${publicBase}/api/v1/check-in/${token}`;
   const fileName = `${token}.png`;
   const filePath = path.join(QR_DIR, fileName);
 
@@ -43,7 +44,7 @@ const generateReservationQR = async (reservationId) => {
       width: 400,
     });
 
-    const publicUrl = `${env.PUBLIC_BASE_URL}/qr/${fileName}`;
+    const publicUrl = `${publicBase}/qr/${fileName}`;
 
     logger.info('QR code generated', { reservationId, token, path: filePath });
 
