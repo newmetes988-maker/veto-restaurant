@@ -15,24 +15,32 @@ const autoSeed = async () => {
     const checkResult = await pool.query(
       "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'tenants')"
     );
-    if (checkResult.rows[0].exists) {
+    if (!checkResult.rows[0].exists) {
+      logger.info('First run detected — seeding database...');
+      const schemaPath = path.join(__dirname, '..', 'schema.sql');
+      const schema = fs.readFileSync(schemaPath, 'utf-8');
+      await pool.query(schema);
+      logger.info('Database seeded successfully.');
+    } else {
       logger.info('Database already seeded.');
-      return;
     }
-    logger.info('First run detected — seeding database...');
-    const schemaPath = path.join(__dirname, '..', 'schema.sql');
-    const schema = fs.readFileSync(schemaPath, 'utf-8');
-    await pool.query(schema);
-    logger.info('Database seeded successfully.');
 
-    // Create default admin user
-    const passwordHash = await bcrypt.hash('admin1234', 12);
-    await pool.query(
-      `INSERT INTO admin_users (id, tenant_id, email, password_hash, first_name, last_name, role, is_active, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW())`,
-      ['cfea9362-cb1e-401c-8d8f-4a825e110935', DEFAULT_TENANT_ID, 'admin@restaurant.com', passwordHash, 'Admin', 'User', 'owner']
+    // Ensure default admin user exists
+    const adminResult = await pool.query(
+      'SELECT id FROM admin_users WHERE tenant_id = $1 AND email = $2',
+      [DEFAULT_TENANT_ID, 'admin@restaurant.com']
     );
-    logger.info('Default admin user created: admin@restaurant.com / admin1234');
+    if (adminResult.rows.length === 0) {
+      const passwordHash = await bcrypt.hash('admin1234', 12);
+      await pool.query(
+        `INSERT INTO admin_users (id, tenant_id, email, password_hash, first_name, last_name, role, is_active, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW())`,
+        ['cfea9362-cb1e-401c-8d8f-4a825e110935', DEFAULT_TENANT_ID, 'admin@restaurant.com', passwordHash, 'Admin', 'User', 'owner']
+      );
+      logger.info('Default admin user created: admin@restaurant.com / admin1234');
+    } else {
+      logger.info('Default admin user already exists.');
+    }
   } catch (err) {
     logger.error('Auto-seed failed', { error: err.message });
   }
