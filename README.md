@@ -62,7 +62,7 @@ POST /api/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "admin@restaurant.com",
+  "email": "",
   "password": "securePassword123",
   "firstName": "Mario",
   "lastName": "Rossi",
