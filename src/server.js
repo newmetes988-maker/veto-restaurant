@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 const app = require('./app');
 const env = require('./config/env');
 const logger = require('./utils/logger');
 const { pool } = require('./config/database');
 
 const PORT = env.PORT;
+const DEFAULT_TENANT_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 // Auto-seed database on first run
 const autoSeed = async () => {
@@ -22,6 +24,15 @@ const autoSeed = async () => {
     const schema = fs.readFileSync(schemaPath, 'utf-8');
     await pool.query(schema);
     logger.info('Database seeded successfully.');
+
+    // Create default admin user
+    const passwordHash = await bcrypt.hash('admin1234', 12);
+    await pool.query(
+      `INSERT INTO admin_users (id, tenant_id, email, password_hash, first_name, last_name, role, is_active, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW())`,
+      ['cfea9362-cb1e-401c-8d8f-4a825e110935', DEFAULT_TENANT_ID, 'admin@restaurant.com', passwordHash, 'Admin', 'User', 'owner']
+    );
+    logger.info('Default admin user created: admin@restaurant.com / admin1234');
   } catch (err) {
     logger.error('Auto-seed failed', { error: err.message });
   }
