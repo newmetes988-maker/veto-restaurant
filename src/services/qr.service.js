@@ -19,7 +19,7 @@ if (!fs.existsSync(QR_DIR)) {
 const generateReservationQR = async (reservationId, baseUrl) => {
   const token = uuidv4();
   const publicBase = baseUrl || env.PUBLIC_BASE_URL || 'http://localhost:3000';
-  const checkInUrl = `${publicBase}/api/v1/check-in/${token}`;
+  const checkInUrl = `${publicBase}/qr/${token}`;
   const fileName = `${token}.png`;
   const filePath = path.join(QR_DIR, fileName);
 
