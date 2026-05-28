@@ -13,6 +13,7 @@ import FoodMenu from './pages/menu/FoodMenu';
 import DessertsMenu from './pages/menu/DessertsMenu';
 import ProductManager from './pages/admin/ProductManager';
 import CategoryManager from './pages/admin/CategoryManager';
+import MessageTemplateManager from './pages/admin/MessageTemplateManager';
 
 const CustomerPage = () => (
   <div className="min-h-screen flex flex-col bg-brand-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-800/40 via-brand-900 to-brand-950">
@@ -88,6 +89,7 @@ function App() {
         <Route path="/menu/desserts" element={<DessertsMenu />} />
         <Route path="/admin/products" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><ProductManager /></AdminPage>} />
         <Route path="/admin/categories" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><CategoryManager /></AdminPage>} />
+        <Route path="/admin/templates" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><MessageTemplateManager /></AdminPage>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

@@ -18,6 +18,7 @@ const productRoutes = require('./routes/product.routes');
 const adminProductRoutes = require('./routes/admin.product.routes');
 const categoryRoutes = require('./routes/category.routes');
 const adminCategoryRoutes = require('./routes/admin.category.routes');
+const messageTemplateRoutes = require('./routes/messageTemplate.routes');
 const reservationController = require('./controllers/reservation.controller');
 
 const app = express();
@@ -89,6 +90,7 @@ app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/admin/products', adminProductRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/admin/categories', adminCategoryRoutes);
+app.use('/api/v1/admin/templates', messageTemplateRoutes);
 
 // Direct QR check-in route (used by WhatsApp links & QR scans)
 app.get('/api/v1/check-in/:token', reservationController.checkIn);

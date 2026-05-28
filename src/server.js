@@ -41,6 +41,30 @@ const autoSeed = async () => {
     } else {
       logger.info('Default admin user already exists.');
     }
+
+    // Ensure default message templates exist
+    const templateCheck = await pool.query(
+      'SELECT COUNT(*) as count FROM message_templates WHERE tenant_id = $1',
+      [DEFAULT_TENANT_ID]
+    );
+    if (parseInt(templateCheck.rows[0].count, 10) === 0) {
+      await pool.query(`
+        INSERT INTO message_templates (id, tenant_id, name, type, body, variables) VALUES
+        ('880e8400-e29b-41d4-a716-446655440100', $1, 'reservation_confirmed', 'whatsapp',
+         '🍽️ *Reservation Confirmed*\n\nHello {{customer_name}},\n\nYour table at *Veto Café & Restaurant* is confirmed.\n\n📅 *Date:* {{date}}\n🕐 *Time:* {{time}}\n👥 *Guests:* {{party_size}}\n\n📍 *Location:* Gleembay / Montaza, Alexandria\n\n🎟️ *Your QR Code:*\n{{qr_url}}\n\nOpen the link to view and download your check-in QR code.\n\nNeed to modify? Reply here or call us.\n\nThank you! 🧡',
+         '["customer_name","date","time","party_size","qr_url"]'),
+        ('880e8400-e29b-41d4-a716-446655440101', $1, 'reservation_rejected', 'whatsapp',
+         'Hello {{customer_name}},\n\nWe regret to inform you that your reservation request for *{{date}} at {{time}}* could not be accommodated.\n\nPlease contact us to explore alternative options.\n\nVeto Café & Restaurant 🧡',
+         '["customer_name","date","time"]'),
+        ('880e8400-e29b-41d4-a716-446655440102', $1, 'reservation_cancelled', 'whatsapp',
+         'Hello {{customer_name}},\n\nYour reservation for *{{date}} at {{time}}* has been cancelled as requested.\n\nWe hope to welcome you another time.\n\nVeto Café & Restaurant 🧡',
+         '["customer_name","date","time"]')
+        ON CONFLICT (tenant_id, name) DO NOTHING
+      `, [DEFAULT_TENANT_ID]);
+      logger.info('Default message templates created.');
+    } else {
+      logger.info('Message templates already exist.');
+    }
   } catch (err) {
     logger.error('Auto-seed failed', { error: err.message });
   }

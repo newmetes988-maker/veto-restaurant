@@ -342,3 +342,37 @@ INSERT INTO products (id, tenant_id, name, name_ar, description, description_ar,
 (gen_random_uuid(), '550e8400-e29b-41d4-a716-446655440000', 'Pancake Nutella', 'بان كيك نوتيلا', null, null, 198, 'Waffle', null, true)
 ON CONFLICT DO NOTHING;
 
+-- ==========================================
+-- MESSAGE TEMPLATES (Editable WhatsApp/SMS messages)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS message_templates (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    name VARCHAR(50) NOT NULL,
+    type VARCHAR(20) NOT NULL DEFAULT 'whatsapp',
+    subject VARCHAR(255),
+    body TEXT NOT NULL,
+    variables JSONB DEFAULT '[]',
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(tenant_id, name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_message_templates_tenant ON message_templates(tenant_id);
+
+-- Seed default templates
+INSERT INTO message_templates (id, tenant_id, name, type, body, variables) VALUES
+('880e8400-e29b-41d4-a716-446655440100', '550e8400-e29b-41d4-a716-446655440000', 'reservation_confirmed', 'whatsapp',
+ '🍽️ *Reservation Confirmed*\n\nHello {{customer_name}},\n\nYour table at *Veto Café & Restaurant* is confirmed.\n\n📅 *Date:* {{date}}\n🕐 *Time:* {{time}}\n👥 *Guests:* {{party_size}}\n\n📍 *Location:* Gleembay / Montaza, Alexandria\n\n🎟️ *Your QR Code:*\n{{qr_url}}\n\nOpen the link to view and download your check-in QR code.\n\nNeed to modify? Reply here or call us.\n\nThank you! 🧡',
+ '["customer_name","date","time","party_size","qr_url"]'),
+
+('880e8400-e29b-41d4-a716-446655440101', '550e8400-e29b-41d4-a716-446655440000', 'reservation_rejected', 'whatsapp',
+ 'Hello {{customer_name}},\n\nWe regret to inform you that your reservation request for *{{date}} at {{time}}* could not be accommodated.\n\nPlease contact us to explore alternative options.\n\nVeto Café & Restaurant 🧡',
+ '["customer_name","date","time"]'),
+
+('880e8400-e29b-41d4-a716-446655440102', '550e8400-e29b-41d4-a716-446655440000', 'reservation_cancelled', 'whatsapp',
+ 'Hello {{customer_name}},\n\nYour reservation for *{{date}} at {{time}}* has been cancelled as requested.\n\nWe hope to welcome you another time.\n\nVeto Café & Restaurant 🧡',
+ '["customer_name","date","time"]')
+ON CONFLICT (tenant_id, name) DO NOTHING;
+

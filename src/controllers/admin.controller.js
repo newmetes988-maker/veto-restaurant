@@ -25,7 +25,12 @@ const updateStatus = catchAsync(async (req, res) => {
   const { status, reason } = req.body;
   const adminUserId = req.user?.userId || null; // Populated by JWT auth middleware
 
-  const updated = await reservationService.updateReservationStatus(id, status, adminUserId, reason);
+  // Dynamic base URL from request (works on any domain)
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host');
+  const baseUrl = `${protocol}://${host}`;
+
+  const updated = await reservationService.updateReservationStatus(id, status, adminUserId, reason, baseUrl);
 
   res.status(200).json({
     status: 'success',

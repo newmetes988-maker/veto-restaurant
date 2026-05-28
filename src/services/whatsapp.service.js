@@ -1,10 +1,12 @@
 const twilio = require('twilio');
 const env = require('../config/env');
 const logger = require('../utils/logger');
+const messageTemplateService = require('./messageTemplate.service');
 
 /**
  * WhatsApp Service using Twilio API.
  * Sends reservation confirmations and updates to customers.
+ * Supports editable message templates from the database.
  */
 class WhatsAppService {
   constructor() {
@@ -30,6 +32,7 @@ class WhatsAppService {
 
   /**
    * Send reservation confirmation with QR code page link.
+   * Uses DB template if available, falls back to hardcoded message.
    */
   async sendConfirmation({ to, reservation, qrPageUrl }) {
     if (!this.isEnabled) {
@@ -55,14 +58,36 @@ class WhatsAppService {
       minute: '2-digit',
     });
 
-    const body = this.buildConfirmationMessage({
-      name: reservation.customer_name,
-      date,
-      time,
-      partySize: reservation.party_size,
-      restaurantName: 'Veto Café & Restaurant',
-      qrPageUrl,
-    });
+    let body;
+    try {
+      const template = await messageTemplateService.getTemplateByName('reservation_confirmed');
+      if (template) {
+        body = messageTemplateService.renderTemplate(template.body, {
+          customer_name: reservation.customer_name,
+          date,
+          time,
+          party_size: reservation.party_size,
+          qr_url: qrPageUrl,
+        });
+      } else {
+        body = this.buildFallbackConfirmationMessage({
+          name: reservation.customer_name,
+          date,
+          time,
+          partySize: reservation.party_size,
+          qrPageUrl,
+        });
+      }
+    } catch (err) {
+      logger.warn('Failed to load confirmation template, using fallback', { error: err.message });
+      body = this.buildFallbackConfirmationMessage({
+        name: reservation.customer_name,
+        date,
+        time,
+        partySize: reservation.party_size,
+        qrPageUrl,
+      });
+    }
 
     try {
       const message = await this.client.messages.create({
@@ -90,6 +115,7 @@ class WhatsAppService {
 
   /**
    * Send status update (rejected, cancelled, etc.)
+   * Uses DB template if available, falls back to hardcoded message.
    */
   async sendStatusUpdate({ to, reservation, status }) {
     if (!this.isEnabled || !to) return null;
@@ -106,13 +132,29 @@ class WhatsAppService {
       minute: '2-digit',
     });
 
-    let body = '';
-    if (status === 'rejected') {
-      body = `Hello ${reservation.customer_name},\n\nWe regret to inform you that your reservation request for *${date} at ${time}* could not be accommodated.\n\nPlease contact us to explore alternative options.\n\nVeto Café & Restaurant 🧡`;
-    } else if (status === 'cancelled') {
-      body = `Hello ${reservation.customer_name},\n\nYour reservation for *${date} at ${time}* has been cancelled as requested.\n\nWe hope to welcome you another time.\n\nVeto Café & Restaurant 🧡`;
-    } else {
-      body = `Hello ${reservation.customer_name},\n\nYour reservation status has been updated to: *${status.toUpperCase()}*\n\nDate: ${date} at ${time}\nGuests: ${reservation.party_size}\n\nVeto Café & Restaurant 🧡`;
+    const templateName = status === 'rejected' ? 'reservation_rejected'
+      : status === 'cancelled' ? 'reservation_cancelled'
+      : null;
+
+    let body;
+    try {
+      if (templateName) {
+        const template = await messageTemplateService.getTemplateByName(templateName);
+        if (template) {
+          body = messageTemplateService.renderTemplate(template.body, {
+            customer_name: reservation.customer_name,
+            date,
+            time,
+          });
+        } else {
+          body = this.buildFallbackStatusMessage({ name: reservation.customer_name, date, time, status });
+        }
+      } else {
+        body = this.buildFallbackStatusMessage({ name: reservation.customer_name, date, time, status });
+      }
+    } catch (err) {
+      logger.warn('Failed to load status template, using fallback', { error: err.message });
+      body = this.buildFallbackStatusMessage({ name: reservation.customer_name, date, time, status });
     }
 
     try {
@@ -136,9 +178,9 @@ class WhatsAppService {
   }
 
   /**
-   * Build the confirmation message body.
+   * Fallback confirmation message (hardcoded).
    */
-  buildConfirmationMessage({ name, date, time, partySize, restaurantName, qrPageUrl }) {
+  buildFallbackConfirmationMessage({ name, date, time, partySize, qrPageUrl }) {
     return `🍽️ *Reservation Confirmed*\n\n` +
       `Hello ${name},\n\n` +
       `Your table at *Veto Café & Restaurant* is confirmed.\n\n` +
@@ -151,6 +193,19 @@ class WhatsAppService {
       `Open the link to view and download your check-in QR code.\n\n` +
       `Need to modify? Reply here or call us.\n\n` +
       `Thank you! 🧡`;
+  }
+
+  /**
+   * Fallback status update message (hardcoded).
+   */
+  buildFallbackStatusMessage({ name, date, time, status }) {
+    if (status === 'rejected') {
+      return `Hello ${name},\n\nWe regret to inform you that your reservation request for *${date} at ${time}* could not be accommodated.\n\nPlease contact us to explore alternative options.\n\nVeto Café & Restaurant 🧡`;
+    }
+    if (status === 'cancelled') {
+      return `Hello ${name},\n\nYour reservation for *${date} at ${time}* has been cancelled as requested.\n\nWe hope to welcome you another time.\n\nVeto Café & Restaurant 🧡`;
+    }
+    return `Hello ${name},\n\nYour reservation status has been updated to: *${status.toUpperCase()}*\n\nDate: ${date} at ${time}\n\nVeto Café & Restaurant 🧡`;
   }
 }
 

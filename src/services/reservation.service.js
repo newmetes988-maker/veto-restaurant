@@ -152,7 +152,7 @@ const getAllReservations = async (options) => {
  * Update reservation status.
  * If status is 'confirmed', generate QR code.
  */
-const updateReservationStatus = async (reservationId, newStatus, adminUserId, reason) => {
+const updateReservationStatus = async (reservationId, newStatus, adminUserId, reason, baseUrl) => {
   const validStatuses = ['pending', 'confirmed', 'rejected', 'cancelled', 'completed', 'no_show'];
   if (!validStatuses.includes(newStatus)) {
     throw new AppError(`Invalid status. Must be one of: ${validStatuses.join(', ')}`, 400);
@@ -246,9 +246,10 @@ const updateReservationStatus = async (reservationId, newStatus, adminUserId, re
       qr_data_uri: qrDataUri || undefined,
     };
 
-    // Send WhatsApp notification (non-blocking, errors are swallowed)
+      // Send WhatsApp notification (non-blocking, errors are swallowed)
     if (newStatus === 'confirmed' && updatedReservation.customer_phone) {
-      const qrPageUrl = `${env.PUBLIC_BASE_URL}/qr/${qrCode}`;
+      const qrBaseUrl = baseUrl || env.PUBLIC_BASE_URL || 'http://localhost:3000';
+      const qrPageUrl = `${qrBaseUrl}/qr/${qrCode}`;
       whatsappService.sendConfirmation({
         to: updatedReservation.customer_phone,
         reservation: updatedReservation,
