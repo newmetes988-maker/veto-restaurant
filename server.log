@@ -1,0 +1,176 @@
+
+> restaurant-reservation-api@1.0.0 start
+> node src/server.js
+
+2026-05-28 08:39:31 [[32minfo[39m]: WhatsApp service initialized
+2026-05-28 08:39:31 [[32minfo[39m]: Server running on port 3000 in development mode
+2026-05-28 08:39:36 [[32minfo[39m]: New database connection established
+2026-05-28 08:39:36 [[32minfo[39m]: New database connection established
+2026-05-28 08:39:36 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 46.012 ms - -[0m
+2026-05-28 08:39:36 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 44.729 ms - 55[0m
+2026-05-28 08:39:37 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.467 ms - -[0m
+2026-05-28 08:39:37 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.913 ms - 55[0m
+2026-05-28 08:40:25 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.517 ms - -[0m
+2026-05-28 08:40:25 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.345 ms - 55[0m
+2026-05-28 08:40:31 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.005 ms - -[0m
+2026-05-28 08:40:31 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.697 ms - 55[0m
+2026-05-28 08:40:35 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.275 ms - -[0m
+2026-05-28 08:40:35 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.731 ms - 55[0m
+2026-05-28 08:43:48 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.622 ms - -[0m
+2026-05-28 08:43:48 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.177 ms - -[0m
+2026-05-28 08:43:50 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.073 ms - -[0m
+2026-05-28 08:43:50 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 0.926 ms - -[0m
+2026-05-28 08:43:53 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.093 ms - -[0m
+2026-05-28 08:43:53 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 0.899 ms - -[0m
+2026-05-28 08:43:58 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.190 ms - -[0m
+2026-05-28 08:43:58 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.241 ms - -[0m
+2026-05-28 08:44:03 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.644 ms - -[0m
+2026-05-28 08:44:03 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 0.973 ms - -[0m
+2026-05-28 08:44:16 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 0.940 ms - -[0m
+2026-05-28 08:44:16 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 0.942 ms - -[0m
+2026-05-28 08:44:18 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.022 ms - -[0m
+2026-05-28 08:44:18 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.269 ms - -[0m
+2026-05-28 08:44:26 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.199 ms - 55[0m
+2026-05-28 08:44:26 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.462 ms - 55[0m
+2026-05-28 08:44:29 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.026 ms - 55[0m
+2026-05-28 08:44:29 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.235 ms - 55[0m
+2026-05-28 08:44:31 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 0.931 ms - 55[0m
+2026-05-28 08:44:31 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.144 ms - 55[0m
+2026-05-28 08:44:48 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 7.239 ms - 276[0m
+2026-05-28 08:44:48 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 5.079 ms - 276[0m
+2026-05-28 08:44:48 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 11.234 ms - 6576[0m
+2026-05-28 08:44:48 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 11.583 ms - 6576[0m
+2026-05-28 08:45:05 [[32minfo[39m]: [0mGET /api/v1/products [32m200[0m 1.207 ms - 55[0m
+2026-05-28 08:45:05 [[32minfo[39m]: [0mGET /api/v1/products [32m200[0m 1.732 ms - 55[0m
+2026-05-28 08:45:09 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 3.052 ms - 6576[0m
+2026-05-28 08:45:09 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 3.355 ms - 6576[0m
+2026-05-28 08:47:19 [[32minfo[39m]: Admin logged in
+2026-05-28 08:47:19 [[32minfo[39m]: [0mPOST /api/v1/auth/login [32m200[0m 302.501 ms - 486[0m
+2026-05-28 08:47:19 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 3.422 ms - 6576[0m
+2026-05-28 08:47:19 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 3.775 ms - 6576[0m
+2026-05-28 08:47:21 [[32minfo[39m]: [0mGET /api/v1/products [32m200[0m 0.907 ms - 55[0m
+2026-05-28 08:47:21 [[32minfo[39m]: [0mGET /api/v1/products [32m200[0m 0.932 ms - 55[0m
+2026-05-28 08:47:27 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 2.355 ms - 6576[0m
+2026-05-28 08:47:27 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 2.763 ms - 6576[0m
+2026-05-28 08:47:32 [[32minfo[39m]: [0mGET /api/v1/reservations/check-in/7f3e519f-f7a5-4a3a-b846-8724faf1fd81 [32m200[0m 4.787 ms - 224[0m
+2026-05-28 08:47:33 [[32minfo[39m]: [0mGET /api/v1/reservations/check-in/7f3e519f-f7a5-4a3a-b846-8724faf1fd81 [32m200[0m 1.353 ms - 224[0m
+2026-05-28 08:47:37 [[32minfo[39m]: [0mPATCH /api/v1/admin/reservations/6a80f1d5-c22a-44c6-85eb-2c50aa373983/status [33m409[0m 3.254 ms - 644[0m
+2026-05-28 08:47:43 [[32minfo[39m]: [0mPATCH /api/v1/admin/reservations/0128915a-de4b-40b4-a098-f0dc9a826757/status [33m409[0m 2.097 ms - 644[0m
+2026-05-28 08:47:47 [[32minfo[39m]: Reservation status updated
+2026-05-28 08:47:48 [[32minfo[39m]: [0mPATCH /api/v1/admin/reservations/0128915a-de4b-40b4-a098-f0dc9a826757/status [32m200[0m 173.196 ms - 772[0m
+2026-05-28 08:47:49 [[32minfo[39m]: WhatsApp status update sent
+2026-05-28 08:47:54 [[32minfo[39m]: Reservation status updated
+2026-05-28 08:47:54 [[32minfo[39m]: [0mPATCH /api/v1/admin/reservations/6a80f1d5-c22a-44c6-85eb-2c50aa373983/status [32m200[0m 13.176 ms - 761[0m
+2026-05-28 08:47:55 [[32minfo[39m]: WhatsApp status update sent
+2026-05-28 08:47:55 [[32minfo[39m]: Reservation status updated
+2026-05-28 08:47:55 [[32minfo[39m]: [0mPATCH /api/v1/admin/reservations/adc5f9a5-9775-4c45-899c-0b9b06988959/status [32m200[0m 9.727 ms - 766[0m
+2026-05-28 08:47:56 [[32minfo[39m]: WhatsApp status update sent
+2026-05-28 08:48:14 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20&status=confirmed [32m200[0m 2.505 ms - 113[0m
+2026-05-28 08:48:15 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20&status=completed [32m200[0m 2.054 ms - 113[0m
+2026-05-28 08:48:59 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 1.438 ms - 276[0m
+2026-05-28 08:48:59 [[32minfo[39m]: New database connection established
+2026-05-28 08:48:59 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 3.517 ms - 6573[0m
+2026-05-28 08:48:59 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 40.606 ms - 276[0m
+2026-05-28 08:48:59 [[32minfo[39m]: New database connection established
+2026-05-28 08:48:59 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 42.865 ms - 6573[0m
+2026-05-28 08:49:02 [[32minfo[39m]: [0mGET /api/v1/products [32m200[0m 5.325 ms - 18775[0m
+2026-05-28 08:49:02 [[32minfo[39m]: [0mGET /api/v1/products [36m304[0m 1.957 ms - -[0m
+2026-05-28 08:49:29 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [36m304[0m 2.470 ms - -[0m
+2026-05-28 08:49:29 [[32minfo[39m]: New database connection established
+2026-05-28 08:49:29 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [32m200[0m 44.228 ms - 6573[0m
+2026-05-28 08:49:34 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 3.874 ms - -[0m
+2026-05-28 08:49:34 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 3.709 ms - 276[0m
+2026-05-28 08:49:36 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.892 ms - 18775[0m
+2026-05-28 08:49:36 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 4.918 ms - 18775[0m
+2026-05-28 08:50:41 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.570 ms - 18775[0m
+2026-05-28 08:50:41 [[32minfo[39m]: New database connection established
+2026-05-28 08:50:41 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 38.044 ms - 18775[0m
+2026-05-28 08:50:53 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20&status=completed [36m304[0m 8.504 ms - -[0m
+2026-05-28 08:51:06 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20&status=completed [36m304[0m 2.356 ms - -[0m
+2026-05-28 08:51:16 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 3.558 ms - -[0m
+2026-05-28 08:51:16 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.183 ms - -[0m
+2026-05-28 08:51:16 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [36m304[0m 3.291 ms - -[0m
+2026-05-28 08:51:16 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [36m304[0m 2.303 ms - -[0m
+2026-05-28 08:51:37 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.813 ms - -[0m
+2026-05-28 08:51:37 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.750 ms - -[0m
+2026-05-28 08:51:37 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [36m304[0m 4.387 ms - -[0m
+2026-05-28 08:51:37 [[32minfo[39m]: [0mGET /api/v1/admin/reservations?page=1&limit=20 [36m304[0m 3.230 ms - -[0m
+2026-05-28 08:52:07 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.084 ms - -[0m
+2026-05-28 08:52:07 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.459 ms - -[0m
+2026-05-28 08:52:11 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.474 ms - -[0m
+2026-05-28 08:52:11 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.875 ms - -[0m
+2026-05-28 08:52:17 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.987 ms - -[0m
+2026-05-28 08:52:17 [[32minfo[39m]: New database connection established
+2026-05-28 08:52:17 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 42.496 ms - 18775[0m
+2026-05-28 08:52:37 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.061 ms - -[0m
+2026-05-28 08:52:37 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 3.682 ms - 18775[0m
+2026-05-28 08:55:02 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.990 ms - -[0m
+2026-05-28 08:55:02 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.287 ms - 88[0m
+2026-05-28 08:55:02 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.959 ms - 18775[0m
+2026-05-28 08:55:02 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.174 ms - 88[0m
+2026-05-28 08:55:03 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.144 ms - -[0m
+2026-05-28 08:55:04 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.131 ms - -[0m
+2026-05-28 08:55:05 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.987 ms - -[0m
+2026-05-28 08:55:05 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.106 ms - 88[0m
+2026-05-28 08:55:05 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.081 ms - 88[0m
+2026-05-28 08:55:05 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.083 ms - 18775[0m
+2026-05-28 08:55:07 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.353 ms - -[0m
+2026-05-28 08:55:07 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.124 ms - 88[0m
+2026-05-28 08:55:07 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.105 ms - 88[0m
+2026-05-28 08:55:07 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.149 ms - 18775[0m
+2026-05-28 08:55:09 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.593 ms - -[0m
+2026-05-28 08:55:09 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.207 ms - 88[0m
+2026-05-28 08:55:09 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.167 ms - 88[0m
+2026-05-28 08:55:09 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.889 ms - 18775[0m
+2026-05-28 08:55:11 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.409 ms - -[0m
+2026-05-28 08:55:11 [[32minfo[39m]: New database connection established
+2026-05-28 08:55:11 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 150.743 ms - 276[0m
+2026-05-28 08:55:12 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.146 ms - 88[0m
+2026-05-28 08:55:12 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.152 ms - 88[0m
+2026-05-28 08:55:12 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.616 ms - 18775[0m
+2026-05-28 08:55:12 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 6.067 ms - -[0m
+2026-05-28 08:55:16 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.689 ms - -[0m
+2026-05-28 08:55:16 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.143 ms - 88[0m
+2026-05-28 08:55:16 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.069 ms - 88[0m
+2026-05-28 08:55:16 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.006 ms - 18775[0m
+2026-05-28 08:55:19 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.794 ms - -[0m
+2026-05-28 08:55:19 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.170 ms - 88[0m
+2026-05-28 08:55:19 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.130 ms - 88[0m
+2026-05-28 08:55:19 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.694 ms - 18775[0m
+2026-05-28 08:55:20 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.093 ms - -[0m
+2026-05-28 08:55:20 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.156 ms - 88[0m
+2026-05-28 08:55:20 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.150 ms - 88[0m
+2026-05-28 08:55:20 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.511 ms - 18775[0m
+2026-05-28 08:55:41 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.875 ms - -[0m
+2026-05-28 08:55:41 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 1.484 ms - 276[0m
+2026-05-28 08:55:43 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.116 ms - 88[0m
+2026-05-28 08:55:43 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.415 ms - -[0m
+2026-05-28 08:55:43 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.162 ms - 88[0m
+2026-05-28 08:55:43 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.889 ms - 18775[0m
+2026-05-28 08:55:49 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.718 ms - -[0m
+2026-05-28 08:55:49 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.130 ms - 88[0m
+2026-05-28 08:55:49 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.067 ms - 88[0m
+2026-05-28 08:55:49 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.844 ms - 18775[0m
+2026-05-28 08:55:50 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 2.256 ms - -[0m
+2026-05-28 08:55:50 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.197 ms - 88[0m
+2026-05-28 08:55:50 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.166 ms - 88[0m
+2026-05-28 08:55:50 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 2.192 ms - 18775[0m
+2026-05-28 08:55:53 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.923 ms - -[0m
+2026-05-28 08:55:53 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.139 ms - 88[0m
+2026-05-28 08:55:53 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.085 ms - 88[0m
+2026-05-28 08:55:53 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.778 ms - 18775[0m
+2026-05-28 08:56:16 [[32minfo[39m]: [0mGET /api/v1/auth/me [36m304[0m 1.785 ms - -[0m
+2026-05-28 08:56:16 [[32minfo[39m]: New database connection established
+2026-05-28 08:56:16 [[32minfo[39m]: [0mGET /api/v1/auth/me [32m200[0m 37.190 ms - 276[0m
+2026-05-28 08:56:17 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.109 ms - 88[0m
+2026-05-28 08:56:17 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.150 ms - 88[0m
+2026-05-28 08:56:17 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.906 ms - 18775[0m
+2026-05-28 08:56:17 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 6.348 ms - -[0m
+2026-05-28 08:56:18 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.666 ms - -[0m
+2026-05-28 08:56:18 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.190 ms - 88[0m
+2026-05-28 08:56:18 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.108 ms - 88[0m
+2026-05-28 08:56:18 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.695 ms - 18775[0m
+2026-05-28 08:56:22 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [36m304[0m 1.803 ms - -[0m
+2026-05-28 08:56:22 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.164 ms - 88[0m
+2026-05-28 08:56:22 [[32minfo[39m]: [0mGET /api/v1/categories?isActive=true [33m404[0m 0.114 ms - 88[0m
+2026-05-28 08:56:22 [[32minfo[39m]: [0mGET /api/v1/products?isActive=true [32m200[0m 1.995 ms - 18775[0m
