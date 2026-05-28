@@ -3,6 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const morgan = require('morgan');
+const path = require('path');
+const fs = require('fs');
 
 const env = require('./config/env');
 const logger = require('./utils/logger');
@@ -23,11 +25,25 @@ const app = express();
 // ============================
 // Static Files (QR codes & Menu PDFs)
 // ============================
-app.use('/qr', express.static('public/qr'));
-app.use('/menu', express.static('public/menu'));
+const publicQrPath = path.resolve(__dirname, '..', 'public/qr');
+const publicMenuPath = path.resolve(__dirname, '..', 'public/menu');
+const clientDistPath = path.resolve(__dirname, '..', 'client/dist');
+
+if (fs.existsSync(publicQrPath)) {
+  app.use('/qr', express.static(publicQrPath));
+}
+if (fs.existsSync(publicMenuPath)) {
+  app.use('/menu', express.static(publicMenuPath));
+}
 
 // Serve React app for client-side routes
-app.use(express.static('client/dist'));
+const hasClientBuild = fs.existsSync(path.join(clientDistPath, 'index.html'));
+if (hasClientBuild) {
+  app.use(express.static(clientDistPath));
+  logger.info('Serving React app from client/dist');
+} else {
+  logger.warn('client/dist/index.html not found. Run: cd client && npm install && npm run build');
+}
 
 // ============================
 // Security Middleware
@@ -90,7 +106,17 @@ app.get('*', (req, res, next) => {
       message: `Cannot ${req.method} ${req.originalUrl} on this server`,
     });
   }
-  res.sendFile('index.html', { root: 'client/dist' });
+  if (hasClientBuild) {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  } else {
+    res.status(503).send(`
+      <html><body style="background:#050505;color:#d4af37;font-family:sans-serif;text-align:center;padding-top:20vh">
+        <h1>Veto API is running</h1>
+        <p style="color:#666">Frontend build not found.</p>
+        <p style="color:#888;font-size:14px">Build Command: cd client && npm install && npm run build</p>
+      </body></html>
+    `);
+  }
 });
 
 // ============================
