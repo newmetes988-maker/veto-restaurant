@@ -11,6 +11,15 @@ const headers = (auth = true) => {
   return h;
 };
 
+const authHeaders = (auth = true) => {
+  const h = {};
+  if (auth) {
+    const token = getToken();
+    if (token) h['Authorization'] = `Bearer ${token}`;
+  }
+  return h;
+};
+
 export const api = {
   get: (path, auth = true) =>
     fetch(`${API_BASE}${path}`, { headers: headers(auth) }).then((r) => r.json()),
@@ -27,5 +36,12 @@ export const api = {
       method: 'PATCH',
       headers: headers(auth),
       body: JSON.stringify(body),
+    }).then((r) => r.json()),
+
+  upload: (path, formData, auth = true) =>
+    fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: authHeaders(auth),
+      body: formData,
     }).then((r) => r.json()),
 };

@@ -19,6 +19,7 @@ const adminProductRoutes = require('./routes/admin.product.routes');
 const categoryRoutes = require('./routes/category.routes');
 const adminCategoryRoutes = require('./routes/admin.category.routes');
 const messageTemplateRoutes = require('./routes/messageTemplate.routes');
+const uploadRoutes = require('./routes/upload.routes');
 const reservationController = require('./controllers/reservation.controller');
 
 const app = express();
@@ -28,6 +29,7 @@ const app = express();
 // ============================
 const publicQrPath = path.resolve(__dirname, '..', 'public/qr');
 const publicMenuPath = path.resolve(__dirname, '..', 'public/menu');
+const publicUploadsPath = path.resolve(__dirname, '..', 'public/uploads');
 const clientDistPath = path.resolve(__dirname, '..', 'client/dist');
 
 if (fs.existsSync(publicQrPath)) {
@@ -35,6 +37,9 @@ if (fs.existsSync(publicQrPath)) {
 }
 if (fs.existsSync(publicMenuPath)) {
   app.use('/menu', express.static(publicMenuPath));
+}
+if (fs.existsSync(publicUploadsPath)) {
+  app.use('/uploads', express.static(publicUploadsPath));
 }
 
 // Serve React app for client-side routes
@@ -91,6 +96,7 @@ app.use('/api/v1/admin/products', adminProductRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/admin/categories', adminCategoryRoutes);
 app.use('/api/v1/admin/templates', messageTemplateRoutes);
+app.use('/api/v1/admin/upload', uploadRoutes);
 
 // Direct QR check-in route (used by WhatsApp links & QR scans)
 app.get('/api/v1/check-in/:token', reservationController.checkIn);

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Plus, Pencil, Trash2, X, Save, ImageIcon } from 'lucide-react';
+import { ArrowLeft, Plus, Pencil, Trash2, X, Save, ImageIcon, Upload } from 'lucide-react';
 
 const BADGES = ['', 'New', 'Popular', 'Spicy', 'Hot'];
 
@@ -14,6 +14,10 @@ const ProductManager = () => {
     name: '', nameAr: '', description: '', descriptionAr: '',
     price: '', category: '', imageUrl: '', badge: '', isActive: true
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const token = localStorage.getItem('admin_token');
 
@@ -46,10 +50,72 @@ const ProductManager = () => {
     setFormData({ name: '', nameAr: '', description: '', descriptionAr: '', price: '', category: categories[0]?.name || '', imageUrl: '', badge: '', isActive: true });
     setEditingId(null);
     setShowForm(false);
+    setImageFile(null);
+    setImagePreview('');
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Only image files (JPEG, PNG, WebP, GIF) are allowed');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = (e) => setImagePreview(e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const uploadImage = async () => {
+    if (!imageFile) return formData.imageUrl;
+
+    setIsUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('image', imageFile);
+
+      const res = await fetch('/api/v1/admin/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formDataUpload,
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        return data.data.url;
+      } else {
+        alert(data.message || 'Failed to upload image');
+        return formData.imageUrl;
+      }
+    } catch {
+      alert('Network error during image upload');
+      return formData.imageUrl;
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Upload image first if a file was selected
+    let finalImageUrl = formData.imageUrl;
+    if (imageFile) {
+      finalImageUrl = await uploadImage();
+      if (!finalImageUrl && imageFile) return; // Upload failed
+    }
+
     const url = editingId ? `/api/v1/admin/products/${editingId}` : '/api/v1/admin/products';
     const method = editingId ? 'PATCH' : 'POST';
 
@@ -60,6 +126,7 @@ const ProductManager = () => {
         body: JSON.stringify({
           ...formData,
           price: parseFloat(formData.price),
+          imageUrl: finalImageUrl,
         }),
       });
       if (res.ok) { resetForm(); fetchProducts(); }
@@ -79,6 +146,8 @@ const ProductManager = () => {
       badge: product.badge || '',
       isActive: product.is_active,
     });
+    setImagePreview(product.image_url || '');
+    setImageFile(null);
     setEditingId(product.id);
     setShowForm(true);
   };
@@ -144,10 +213,65 @@ const ProductManager = () => {
                   {BADGES.map((b) => <option key={b} value={b}>{b || 'None'}</option>)}
                 </select>
               </div>
-              <div>
-                <label className="block text-sm text-brand-300 mb-1">Image URL</label>
-                <input value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} placeholder="https://..." className="input-premium" />
+
+              {/* Image Section */}
+              <div className="md:col-span-2">
+                <label className="block text-sm text-brand-300 mb-2">Product Image</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Image URL Input */}
+                  <div>
+                    <label className="block text-xs text-brand-500 mb-1">Image URL (optional)</label>
+                    <input
+                      value={formData.imageUrl}
+                      onChange={(e) => { setFormData({ ...formData, imageUrl: e.target.value }); setImagePreview(e.target.value); setImageFile(null); }}
+                      placeholder="https://..."
+                      className="input-premium text-sm"
+                    />
+                  </div>
+                  {/* File Upload */}
+                  <div>
+                    <label className="block text-xs text-brand-500 mb-1">Or upload from device</label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 transition-colors text-sm"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {imageFile ? imageFile.name : 'Choose Image File'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Image Preview */}
+                {(imagePreview || formData.imageUrl) && (
+                  <div className="mt-3">
+                    <label className="block text-xs text-brand-500 mb-1.5">Preview</label>
+                    <div className="relative inline-block">
+                      <img
+                        src={imagePreview || formData.imageUrl}
+                        alt="Product preview"
+                        className="w-32 h-32 object-cover rounded-xl border border-brand-700/30"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => { setImagePreview(''); setImageFile(null); setFormData({ ...formData, imageUrl: '' }); }}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500/80 text-white flex items-center justify-center hover:bg-red-500 transition-colors"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
+
               <div className="md:col-span-2">
                 <label className="block text-sm text-brand-300 mb-1">Description (EN)</label>
                 <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={2} className="input-premium resize-none" />
@@ -158,9 +282,9 @@ const ProductManager = () => {
               </div>
             </div>
             <div className="flex items-center gap-3 pt-2">
-              <button type="submit" className="btn-primary flex items-center gap-2">
+              <button type="submit" disabled={isUploading} className="btn-primary flex items-center gap-2 disabled:opacity-50">
                 <Save className="w-4 h-4" />
-                {editingId ? 'Update Product' : 'Create Product'}
+                {isUploading ? 'Uploading...' : editingId ? 'Update Product' : 'Create Product'}
               </button>
               <label className="flex items-center gap-2 text-brand-300 text-sm cursor-pointer">
                 <input type="checkbox" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} className="w-4 h-4 rounded accent-gold-500" />
@@ -181,6 +305,7 @@ const ProductManager = () => {
               <table className="w-full text-sm text-left">
                 <thead className="bg-brand-800/80 text-brand-300 uppercase text-xs tracking-wider">
                   <tr>
+                    <th className="px-5 py-3.5">Image</th>
                     <th className="px-5 py-3.5">Name</th>
                     <th className="px-5 py-3.5">Category</th>
                     <th className="px-5 py-3.5">Price</th>
@@ -191,6 +316,15 @@ const ProductManager = () => {
                 <tbody className="divide-y divide-brand-700/30">
                   {products.map((p) => (
                     <tr key={p.id} className="bg-brand-800/20 hover:bg-brand-800/40 transition-colors">
+                      <td className="px-5 py-4">
+                        {p.image_url ? (
+                          <img src={p.image_url} alt={p.name} className="w-12 h-12 rounded-lg object-cover border border-brand-700/30" onError={(e) => { e.target.style.display = 'none'; }} />
+                        ) : (
+                          <div className="w-12 h-12 rounded-lg bg-brand-800/60 border border-brand-700/30 flex items-center justify-center">
+                            <ImageIcon className="w-5 h-5 text-brand-600" />
+                          </div>
+                        )}
+                      </td>
                       <td className="px-5 py-4">
                         <div className="font-medium text-white">{p.name}</div>
                         {p.name_ar && <div className="text-xs text-brand-500">{p.name_ar}</div>}
