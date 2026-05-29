@@ -5,11 +5,12 @@ const { randomUUID: uuidv4 } = require('crypto');
 const catchAsync = require('../utils/catchAsync');
 const logger = require('../utils/logger');
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'products');
+const UPLOAD_DIR = path.join(__dirname, '..', '..', 'public', 'uploads', 'products');
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  logger.info('Upload directory created', { path: UPLOAD_DIR });
 }
 
 // Configure multer storage

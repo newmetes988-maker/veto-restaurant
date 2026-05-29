@@ -67,6 +67,9 @@ const EventManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.title.trim()) { alert('Title is required'); return; }
+    if (!formData.eventDate) { alert('Date is required'); return; }
+
     let finalImageUrl = formData.imageUrl;
     if (imageFile) {
       finalImageUrl = await uploadImage();
@@ -81,8 +84,11 @@ const EventManager = () => {
         body: JSON.stringify({ ...formData, imageUrl: finalImageUrl, maxCapacity: parseInt(formData.maxCapacity) || 0, price: parseFloat(formData.price) || 0 }),
       });
       if (res.ok) { resetForm(); fetchEvents(); }
-      else alert('Failed to save event');
-    } catch { alert('Network error'); }
+      else {
+        const errData = await res.json().catch(() => ({}));
+        alert(errData.message || `Failed to save event (HTTP ${res.status})`);
+      }
+    } catch (err) { alert('Network error: ' + err.message); }
   };
 
   const handleEdit = (ev) => {

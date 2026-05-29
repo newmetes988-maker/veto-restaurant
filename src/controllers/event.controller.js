@@ -1,5 +1,6 @@
 const eventService = require('../services/event.service');
 const catchAsync = require('../utils/catchAsync');
+const logger = require('../utils/logger');
 
 const getAllEvents = catchAsync(async (req, res) => {
   const events = await eventService.getAllEvents(req.query);
@@ -12,11 +13,13 @@ const getEvent = catchAsync(async (req, res) => {
 });
 
 const createEvent = catchAsync(async (req, res) => {
+  logger.info('Creating event', { body: req.body });
   const event = await eventService.createEvent(req.body);
   res.status(201).json({ status: 'success', message: 'Event created', data: { event } });
 });
 
 const updateEvent = catchAsync(async (req, res) => {
+  logger.info('Updating event', { id: req.params.id, body: req.body });
   const event = await eventService.updateEvent(req.params.id, req.body);
   res.status(200).json({ status: 'success', message: 'Event updated', data: { event } });
 });

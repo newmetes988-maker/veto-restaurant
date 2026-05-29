@@ -67,6 +67,8 @@ const OfferManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.title.trim()) { alert('Title is required'); return; }
+
     let finalImageUrl = formData.imageUrl;
     if (imageFile) {
       finalImageUrl = await uploadImage();
@@ -81,8 +83,11 @@ const OfferManager = () => {
         body: JSON.stringify({ ...formData, imageUrl: finalImageUrl, discountPercent: parseInt(formData.discountPercent) || 0, discountAmount: parseFloat(formData.discountAmount) || 0 }),
       });
       if (res.ok) { resetForm(); fetchOffers(); }
-      else alert('Failed to save offer');
-    } catch { alert('Network error'); }
+      else {
+        const errData = await res.json().catch(() => ({}));
+        alert(errData.message || `Failed to save offer (HTTP ${res.status})`);
+      }
+    } catch (err) { alert('Network error: ' + err.message); }
   };
 
   const handleEdit = (o) => {
