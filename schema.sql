@@ -376,3 +376,89 @@ INSERT INTO message_templates (id, tenant_id, name, type, body, variables) VALUE
  '["customer_name","date","time"]')
 ON CONFLICT (tenant_id, name) DO NOTHING;
 
+
+-- ==========================================
+-- EVENTS
+-- ==========================================
+CREATE TABLE IF NOT EXISTS events (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    image_url VARCHAR(500),
+    event_date DATE NOT NULL,
+    event_time TIME,
+    location VARCHAR(255),
+    max_capacity INT DEFAULT 0,
+    price DECIMAL(10,2) DEFAULT 0,
+    is_featured BOOLEAN DEFAULT false,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_events_tenant ON events(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_events_date ON events(tenant_id, event_date);
+CREATE INDEX IF NOT EXISTS idx_events_active ON events(tenant_id, is_active, event_date);
+
+-- Seed sample events
+INSERT INTO events (id, tenant_id, title, description, image_url, event_date, event_time, location, max_capacity, price, is_featured, is_active) VALUES
+('990e8400-e29b-41d4-a716-446655440200', '550e8400-e29b-41d4-a716-446655440000', 'Live Jazz Night', 'An enchanting evening of smooth jazz performed by local artists. Perfect for a romantic dinner.', '/images/event-jazz.jpg', '2026-06-05', '20:00', 'Main Dining Hall', 60, 250, true, true),
+('990e8400-e29b-41d4-a716-446655440201', '550e8400-e29b-41d4-a716-446655440000', 'Sushi Masterclass', 'Learn the art of sushi making from our executive chef. Includes tasting menu and certificate.', '/images/event-sushi.jpg', '2026-06-12', '18:00', 'Open Kitchen', 20, 450, true, true),
+('990e8400-e29b-41d4-a716-446655440202', '550e8400-e29b-41d4-a716-446655440000', 'Sunset Rooftop Party', 'Enjoy crafted cocktails and tapas with a breathtaking view of the Mediterranean.', '/images/event-sunset.jpg', '2026-06-20', '17:00', 'Rooftop Terrace', 80, 150, false, true)
+ON CONFLICT DO NOTHING;
+
+-- ==========================================
+-- OFFERS / PROMOTIONS
+-- ==========================================
+CREATE TABLE IF NOT EXISTS offers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    discount_percent INT DEFAULT 0,
+    discount_amount DECIMAL(10,2) DEFAULT 0,
+    code VARCHAR(50),
+    image_url VARCHAR(500),
+    start_date DATE,
+    end_date DATE,
+    terms TEXT,
+    is_featured BOOLEAN DEFAULT false,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_offers_tenant ON offers(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_offers_active ON offers(tenant_id, is_active, end_date);
+
+-- Seed sample offers
+INSERT INTO offers (id, tenant_id, title, description, discount_percent, code, image_url, start_date, end_date, terms, is_featured, is_active) VALUES
+('990e8400-e29b-41d4-a716-446655440300', '550e8400-e29b-41d4-a716-446655440000', 'Weekend Special', 'Get 30% off your total bill every Friday & Saturday. Perfect for family gatherings!', 30, 'WEEKEND30', '/images/offer-weekend.jpg', '2026-05-01', '2026-12-31', 'Valid on Fridays and Saturdays only. Min spend 500 EGP.', true, true),
+('990e8400-e29b-41d4-a716-446655440301', '550e8400-e29b-41d4-a716-446655440000', 'Sushi Lovers Combo', 'Buy any 2 sushi rolls and get the 3rd one free. Mix and match your favorites!', 33, 'SUSHI3FOR2', '/images/offer-sushi.jpg', '2026-05-01', '2026-08-31', 'Lowest priced roll is free. Cannot be combined with other offers.', true, true),
+('990e8400-e29b-41d4-a716-446655440302', '550e8400-e29b-41d4-a716-446655440000', 'Happy Hour', '50% off all mocktails and juices from 3PM to 6PM daily. Beat the heat!', 50, 'HAPPY50', '/images/offer-happyhour.jpg', '2026-05-01', '2026-12-31', 'Valid 3:00 PM - 6:00 PM daily. Dine-in only.', false, true)
+ON CONFLICT DO NOTHING;
+
+-- ==========================================
+-- REVIEWS / TESTIMONIALS
+-- ==========================================
+CREATE TABLE IF NOT EXISTS reviews (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    customer_name VARCHAR(255) NOT NULL,
+    rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    is_approved BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_reviews_tenant ON reviews(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_approved ON reviews(tenant_id, is_approved, created_at DESC);
+
+-- Seed sample reviews
+INSERT INTO reviews (id, tenant_id, customer_name, rating, comment, is_approved) VALUES
+('990e8400-e29b-41d4-a716-446655440400', '550e8400-e29b-41d4-a716-446655440000', 'Ahmed Hassan', 5, 'Absolutely stunning experience! The ambiance was perfect for our anniversary dinner. The sushi was the best I have had in Alexandria.', true),
+('990e8400-e29b-41d4-a716-446655440401', '550e8400-e29b-41d4-a716-446655440000', 'Sarah Mitchell', 5, 'The live jazz night was magical. Amazing food, great cocktails, and the staff made us feel like royalty. Will definitely be back!', true),
+('990e8400-e29b-41d4-a716-446655440402', '550e8400-e29b-41d4-a716-446655440000', 'Omar Khalil', 4, 'Great place for a business lunch. The Spanish Latte is a must-try. Service was a bit slow but the food quality made up for it.', true),
+('990e8400-e29b-41d4-a716-446655440403', '550e8400-e29b-41d4-a716-446655440000', 'Layla Farouk', 5, 'I attended the sushi masterclass and it was incredible! The chef was so patient and knowledgeable. Highly recommend.', true)
+ON CONFLICT DO NOTHING;

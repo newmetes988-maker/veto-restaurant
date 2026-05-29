@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { LogOut, Filter, Search, RefreshCw, Calendar, Users, Package, Layers, MessageSquare, Menu, X } from 'lucide-react';
+import { LogOut, Filter, Search, RefreshCw, Calendar, Users, Package, Layers, MessageSquare, Star, Percent, Ticket, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReservationTable from './ReservationTable';
 import StatusBadge from './StatusBadge';
@@ -124,6 +124,27 @@ const AdminDashboard = ({ user, onLogout }) => {
                 <MessageSquare className="w-4 h-4" />
                 Templates
               </Link>
+              <Link
+                to="/admin/events"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 hover:text-white transition-colors text-sm"
+              >
+                <Ticket className="w-4 h-4" />
+                Events
+              </Link>
+              <Link
+                to="/admin/offers"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 hover:text-white transition-colors text-sm"
+              >
+                <Percent className="w-4 h-4" />
+                Offers
+              </Link>
+              <Link
+                to="/admin/reviews"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 hover:text-white transition-colors text-sm"
+              >
+                <Star className="w-4 h-4" />
+                Reviews
+              </Link>
               <div className="hidden sm:flex items-center gap-2 text-sm text-brand-400">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 {user?.firstName} {user?.lastName}
@@ -171,6 +192,30 @@ const AdminDashboard = ({ user, onLogout }) => {
                 >
                   <MessageSquare className="w-4 h-4" />
                   Templates
+                </Link>
+                <Link
+                  to="/admin/events"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-brand-300 hover:text-white hover:bg-brand-800/50 transition-colors text-sm"
+                >
+                  <Ticket className="w-4 h-4" />
+                  Events
+                </Link>
+                <Link
+                  to="/admin/offers"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-brand-300 hover:text-white hover:bg-brand-800/50 transition-colors text-sm"
+                >
+                  <Percent className="w-4 h-4" />
+                  Offers
+                </Link>
+                <Link
+                  to="/admin/reviews"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-brand-300 hover:text-white hover:bg-brand-800/50 transition-colors text-sm"
+                >
+                  <Star className="w-4 h-4" />
+                  Reviews
                 </Link>
                 <div className="flex items-center gap-2 px-3 py-2 text-sm text-brand-400">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
