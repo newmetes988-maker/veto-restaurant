@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { validateReservation } from '../utils/validation';
 import { useReservation } from '../hooks/useReservation';
 import SuccessModal from './SuccessModal';
+import { Clock, MapPin, Phone, Star, ChevronDown } from 'lucide-react';
 
 const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 20];
 
@@ -25,7 +26,7 @@ const getMaxDate = () => {
 
 const InputField = ({ label, error, icon, children, required }) => (
   <div className="space-y-1.5">
-    <label className="block text-sm font-medium text-brand-300">
+    <label className="block text-xs font-medium text-brand-400 uppercase tracking-wider">
       {label}
       {required && <span className="text-gold-500 ml-1">*</span>}
     </label>
@@ -84,25 +85,16 @@ const ReservationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitAttempted(true);
-
     if (!isValid) return;
-
     try {
       await submitReservation(formData);
-    } catch {
-      // Error handled by hook
-    }
+    } catch {}
   };
 
   const handleReset = () => {
     setFormData({
-      customerName: '',
-      customerPhone: '',
-      customerEmail: '',
-      scheduledDate: '',
-      scheduledTime: '',
-      partySize: '2',
-      notes: '',
+      customerName: '', customerPhone: '', customerEmail: '',
+      scheduledDate: '', scheduledTime: '', partySize: '2', notes: '',
     });
     setTouched({});
     setSubmitAttempted(false);
@@ -111,214 +103,199 @@ const ReservationForm = () => {
 
   return (
     <>
-      <section className="w-full px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-2xl mx-auto">
-          {/* Hero Text */}
-          <div className="text-center mb-10 animate-slide-up">
-            <p className="text-gold-400 text-sm tracking-[0.2em] uppercase mb-3">Reservations</p>
-            <h2 className="font-serif text-4xl sm:text-5xl text-white mb-4">
-              Book Your Table
-            </h2>
-            <p className="text-brand-400 max-w-md mx-auto leading-relaxed">
-              Enjoy a delightful buffet, café, and dining experience at Veto.
-              Reserve your table and we will confirm shortly.
-            </p>
-          </div>
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-screen flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/hero.png"
+            alt="Veto Restaurant Interior"
+            className="w-full h-full object-cover"
+          />
+          {/* Dark overlay - stronger on the right where the form is */}
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-950/70 via-brand-950/80 to-brand-950/95" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-brand-950/50" />
+        </div>
 
-          {/* Form Card */}
-          <form
-            onSubmit={handleSubmit}
-            className="glass-panel p-6 sm:p-10 space-y-6 animate-slide-up"
-            style={{ animationDelay: '0.1s' }}
-            noValidate
-          >
-            {/* Name */}
-            <InputField
-              label="Full Name"
-              error={getFieldError('customerName')}
-              required
-              icon={
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              }
-            >
-              <input
-                type="text"
-                name="customerName"
-                value={formData.customerName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="John Doe"
-                className="input-premium pl-11"
-                disabled={isSubmitting}
-              />
-            </InputField>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left: Hero Text */}
+            <div className="text-center lg:text-left animate-slide-up">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/20 mb-6">
+                <Star className="w-3.5 h-3.5 text-gold-400" />
+                <span className="text-gold-400 text-xs tracking-widest uppercase font-medium">Fine Dining Experience</span>
+              </div>
 
-            {/* Contact Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <InputField
-                label="Phone Number"
-                error={getFieldError('customerPhone') || getFieldError('contact')}
-                icon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                }
-              >
-                <input
-                  type="tel"
-                  name="customerPhone"
-                  value={formData.customerPhone}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="+1 (234) 567-890"
-                  className="input-premium pl-11"
-                  disabled={isSubmitting}
-                />
-              </InputField>
+              <h2 className="font-serif text-5xl sm:text-6xl lg:text-7xl text-white mb-6 leading-[1.1]">
+                Book Your
+                <span className="block text-gold-400">Table</span>
+              </h2>
 
-              <InputField
-                label="Email Address"
-                error={getFieldError('customerEmail')}
-                icon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                  </svg>
-                }
-              >
-                <input
-                  type="email"
-                  name="customerEmail"
-                  value={formData.customerEmail}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="john@example.com"
-                  className="input-premium pl-11"
-                  disabled={isSubmitting}
-                />
-              </InputField>
-            </div>
+              <p className="text-brand-300 text-base sm:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed mb-8">
+                Experience culinary excellence at Veto. Reserve your spot for an unforgettable evening of fine dining, crafted cocktails, and impeccable service.
+              </p>
 
-            {/* Date & Time */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <InputField label="Date" error={getFieldError('scheduledDate')} required>
-                <input
-                  type="date"
-                  name="scheduledDate"
-                  value={formData.scheduledDate}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  min={getToday()}
-                  max={getMaxDate()}
-                  className="input-premium [color-scheme:dark]"
-                  disabled={isSubmitting}
-                />
-              </InputField>
-
-              <InputField label="Time" error={getFieldError('scheduledTime')} required>
-                <div className="relative">
-                  <select
-                    name="scheduledTime"
-                    value={formData.scheduledTime}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className="input-premium appearance-none cursor-pointer"
-                    disabled={isSubmitting}
-                  >
-                    <option value="" disabled>Select a time</option>
-                    {TIME_SLOTS.map((slot) => (
-                      <option key={slot} value={slot} className="bg-brand-900 text-white">
-                        {slot}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-brand-500">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+              {/* Info badges */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-900/60 border border-brand-700/30 backdrop-blur-sm">
+                  <Clock className="w-4 h-4 text-gold-400" />
+                  <span className="text-brand-300 text-sm">11:00 AM — 12:00 AM</span>
                 </div>
-              </InputField>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-900/60 border border-brand-700/30 backdrop-blur-sm">
+                  <MapPin className="w-4 h-4 text-gold-400" />
+                  <span className="text-brand-300 text-sm">Gleem Bay · Montaza</span>
+                </div>
+              </div>
             </div>
 
-            {/* Guests */}
-            <InputField label="Number of Guests" error={getFieldError('partySize')} required>
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                {GUEST_OPTIONS.map((num) => (
-                  <button
-                    key={num}
-                    type="button"
-                    onClick={() => setFormData((prev) => ({ ...prev, partySize: num.toString() }))}
-                    className={`py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      formData.partySize === num.toString()
-                        ? 'bg-gold-500 text-brand-900 shadow-lg shadow-gold-500/20'
-                        : 'bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 hover:text-white'
-                    }`}
+            {/* Right: Form Card */}
+            <div className="animate-slide-up" style={{ animationDelay: '0.15s' }}>
+              <form
+                onSubmit={handleSubmit}
+                className="bg-brand-900/40 backdrop-blur-2xl border border-brand-700/30 rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl shadow-black/40"
+                noValidate
+              >
+                <div className="text-center mb-2">
+                  <h3 className="font-serif text-xl text-white">Reservation Details</h3>
+                  <p className="text-brand-500 text-xs mt-1">We will confirm your booking within 15 minutes</p>
+                </div>
+
+                {/* Name */}
+                <InputField label="Full Name" error={getFieldError('customerName')} required>
+                  <input
+                    type="text" name="customerName"
+                    value={formData.customerName}
+                    onChange={handleChange} onBlur={handleBlur}
+                    placeholder="e.g. John Doe"
+                    className="input-premium w-full"
                     disabled={isSubmitting}
-                  >
-                    {num}
-                  </button>
-                ))}
-              </div>
-            </InputField>
+                  />
+                </InputField>
 
-            {/* Notes */}
-            <InputField label="Special Requests (Optional)" error={null}>
-              <textarea
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                rows={3}
-                placeholder="Dietary restrictions, occasion, seating preference..."
-                className="input-premium resize-none"
-                disabled={isSubmitting}
-              />
-            </InputField>
+                {/* Contact Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <InputField label="Phone" error={getFieldError('customerPhone') || getFieldError('contact')}>
+                    <input
+                      type="tel" name="customerPhone"
+                      value={formData.customerPhone}
+                      onChange={handleChange} onBlur={handleBlur}
+                      placeholder="+20 10..."
+                      className="input-premium w-full"
+                      disabled={isSubmitting}
+                    />
+                  </InputField>
+                  <InputField label="Email" error={getFieldError('customerEmail')}>
+                    <input
+                      type="email" name="customerEmail"
+                      value={formData.customerEmail}
+                      onChange={handleChange} onBlur={handleBlur}
+                      placeholder="john@example.com"
+                      className="input-premium w-full"
+                      disabled={isSubmitting}
+                    />
+                  </InputField>
+                </div>
 
-            {/* Submit Error */}
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center animate-fade-in">
-                <p className="text-red-400 text-sm">{error}</p>
-              </div>
-            )}
+                {/* Date & Time */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <InputField label="Date" error={getFieldError('scheduledDate')} required>
+                    <input
+                      type="date" name="scheduledDate"
+                      value={formData.scheduledDate}
+                      onChange={handleChange} onBlur={handleBlur}
+                      min={getToday()} max={getMaxDate()}
+                      className="input-premium w-full [color-scheme:dark]"
+                      disabled={isSubmitting}
+                    />
+                  </InputField>
+                  <InputField label="Time" error={getFieldError('scheduledTime')} required>
+                    <div className="relative">
+                      <select
+                        name="scheduledTime"
+                        value={formData.scheduledTime}
+                        onChange={handleChange} onBlur={handleBlur}
+                        className="input-premium w-full appearance-none cursor-pointer"
+                        disabled={isSubmitting}
+                      >
+                        <option value="" disabled>Select time</option>
+                        {TIME_SLOTS.map((slot) => (
+                          <option key={slot} value={slot} className="bg-brand-900 text-white">{slot}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-brand-500 w-4 h-4" />
+                    </div>
+                  </InputField>
+                </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn-primary w-full flex items-center justify-center gap-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  <span>Submitting...</span>
-                </>
-              ) : (
-                <>
-                  <span>Request Reservation</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </>
-              )}
-            </button>
+                {/* Guests */}
+                <InputField label="Guests" error={getFieldError('partySize')} required>
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                    {GUEST_OPTIONS.map((num) => (
+                      <button
+                        key={num} type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, partySize: num.toString() }))}
+                        className={`py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          formData.partySize === num.toString()
+                            ? 'bg-gold-500 text-brand-900 shadow-lg shadow-gold-500/20'
+                            : 'bg-brand-800/40 text-brand-300 border border-brand-700/30 hover:bg-brand-700/50 hover:text-white'
+                        }`}
+                        disabled={isSubmitting}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                </InputField>
 
-            <p className="text-center text-xs text-brand-500">
-              By reserving, you agree to our cancellation policy. We will confirm within 15 minutes.
-            </p>
-          </form>
+                {/* Notes */}
+                <InputField label="Special Requests (Optional)">
+                  <textarea
+                    name="notes" value={formData.notes}
+                    onChange={handleChange} onBlur={handleBlur}
+                    rows={2}
+                    placeholder="Dietary restrictions, occasion, seating preference..."
+                    className="input-premium w-full resize-none"
+                    disabled={isSubmitting}
+                  />
+                </InputField>
+
+                {/* Error */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center animate-fade-in">
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-xl bg-gold-500 text-brand-900 font-semibold text-sm tracking-wide hover:bg-gold-400 transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-gold-500/20"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Processing...
+                    </>
+                  ) : (
+                    <>Request Reservation</>
+                  )}
+                </button>
+
+                <p className="text-center text-[11px] text-brand-600">
+                  By reserving, you agree to our cancellation policy.
+                </p>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Success Modal */}
-      {isSuccess && (
-        <SuccessModal reservation={responseData} onClose={handleReset} />
-      )}
+      {isSuccess && <SuccessModal reservation={responseData} onClose={handleReset} />}
     </>
   );
 };

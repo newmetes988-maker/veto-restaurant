@@ -16,18 +16,12 @@ import CategoryManager from './pages/admin/CategoryManager';
 import MessageTemplateManager from './pages/admin/MessageTemplateManager';
 
 const CustomerPage = () => (
-  <div className="min-h-screen flex flex-col bg-brand-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-800/40 via-brand-900 to-brand-950">
-    <div className="fixed inset-0 pointer-events-none overflow-hidden">
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 -left-40 w-80 h-80 bg-brand-700/10 rounded-full blur-3xl" />
-    </div>
-    <div className="relative z-10 flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1">
-        <ReservationForm />
-      </main>
-      <Footer />
-    </div>
+  <div className="min-h-screen bg-brand-950">
+    <Header />
+    <main>
+      <ReservationForm />
+    </main>
+    <Footer />
   </div>
 );
 
