@@ -24,6 +24,7 @@ const eventRoutes = require('./routes/event.routes');
 const offerRoutes = require('./routes/offer.routes');
 const reviewRoutes = require('./routes/review.routes');
 const reservationController = require('./controllers/reservation.controller');
+const { migrate } = require('./controllers/migrate.controller');
 
 const app = express();
 
@@ -76,6 +77,11 @@ const morganFormat = env.NODE_ENV === 'production' ? 'combined' : 'dev';
 app.use(morgan(morganFormat, {
   stream: { write: (message) => logger.info(message.trim()) },
 }));
+
+// ============================
+// Migration endpoint (one-time, creates missing tables)
+// ============================
+app.get('/migrate', migrate);
 
 // ============================
 // Health Check
