@@ -18,6 +18,7 @@ import MessageTemplateManager from './pages/admin/MessageTemplateManager';
 import EventManager from './pages/admin/EventManager';
 import OfferManager from './pages/admin/OfferManager';
 import ReviewManager from './pages/admin/ReviewManager';
+import SettingManager from './pages/admin/SettingManager';
 
 const ReservePage = () => (
   <div className="min-h-screen bg-brand-950">
@@ -92,6 +93,7 @@ function App() {
         <Route path="/admin/events" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><EventManager /></AdminPage>} />
         <Route path="/admin/offers" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><OfferManager /></AdminPage>} />
         <Route path="/admin/reviews" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><ReviewManager /></AdminPage>} />
+        <Route path="/admin/settings" element={<AdminPage user={user} onLogin={handleLogin} onLogout={logout} loginError={loginError} loginLoading={loginLoading}><SettingManager /></AdminPage>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

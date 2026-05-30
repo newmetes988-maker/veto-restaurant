@@ -80,6 +80,23 @@ const migrate = async (req, res) => {
   await runQuery('CREATE INDEX IF NOT EXISTS idx_reviews_tenant ON reviews(tenant_id)');
   await runQuery('CREATE INDEX IF NOT EXISTS idx_reviews_approved ON reviews(tenant_id, is_approved, created_at DESC)');
 
+  // 4. Create settings table
+  const settingsTable = await runQuery(`
+    CREATE TABLE IF NOT EXISTS settings (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+      social_links JSONB DEFAULT '{}',
+      contact_phones JSONB DEFAULT '[]',
+      contact_email VARCHAR(255),
+      address TEXT,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(tenant_id)
+    )
+  `);
+  results.push({ step: 'Create settings table', ...settingsTable });
+
+  await runQuery('CREATE INDEX IF NOT EXISTS idx_settings_tenant ON settings(tenant_id)');
+
   // 4. Seed events
   const eventsSeed = await runQuery(`
     INSERT INTO events (id, tenant_id, title, description, image_url, event_date, event_time, location, max_capacity, price, is_featured, is_active) VALUES
@@ -110,6 +127,18 @@ const migrate = async (req, res) => {
     ON CONFLICT DO NOTHING
   `, [DEFAULT_TENANT_ID]);
   results.push({ step: 'Seed reviews', ...reviewsSeed });
+
+  // 7. Seed settings
+  const settingsSeed = await runQuery(`
+    INSERT INTO settings (id, tenant_id, social_links, contact_phones, contact_email, address) VALUES
+    ('550e8400-e29b-41d4-a716-446655440001', $1,
+     '{"facebook":"","twitter":"","tiktok":"","instagram":"","custom":[]}',
+     '["01050101097","01050101098"]',
+     'hello@veto.restaurant',
+     'Gleembay / Montaza, Alexandria')
+    ON CONFLICT DO NOTHING
+  `, [DEFAULT_TENANT_ID]);
+  results.push({ step: 'Seed settings', ...settingsSeed });
 
   const hasErrors = results.some((r) => !r.success);
   logger.info('Migration completed', { results });

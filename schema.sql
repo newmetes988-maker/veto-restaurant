@@ -462,3 +462,36 @@ INSERT INTO reviews (id, tenant_id, customer_name, rating, comment, is_approved)
 ('990e8400-e29b-41d4-a716-446655440402', '550e8400-e29b-41d4-a716-446655440000', 'Omar Khalil', 4, 'Great place for a business lunch. The Spanish Latte is a must-try. Service was a bit slow but the food quality made up for it.', true),
 ('990e8400-e29b-41d4-a716-446655440403', '550e8400-e29b-41d4-a716-446655440000', 'Layla Farouk', 5, 'I attended the sushi masterclass and it was incredible! The chef was so patient and knowledgeable. Highly recommend.', true)
 ON CONFLICT DO NOTHING;
+
+-- ==========================================
+-- SETTINGS (Dynamic config: phone, social links, etc.)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS settings (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    key VARCHAR(50) NOT NULL,
+    value TEXT NOT NULL,
+    type VARCHAR(20) NOT NULL DEFAULT 'text',
+    label VARCHAR(100) NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT true,
+    sort_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(tenant_id, key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_settings_tenant ON settings(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_settings_public ON settings(tenant_id, is_public);
+
+-- Seed default settings
+INSERT INTO settings (id, tenant_id, key, value, type, label, is_public, sort_order) VALUES
+('aa0e8400-e29b-41d4-a716-446655440500', '550e8400-e29b-41d4-a716-446655440000', 'phone_primary', '+20 10 5010 1098', 'phone', 'Primary Phone', true, 1),
+('aa0e8400-e29b-41d4-a716-446655440501', '550e8400-e29b-41d4-a716-446655440000', 'phone_secondary', '+20 10 5010 1097', 'phone', 'Secondary Phone', true, 2),
+('aa0e8400-e29b-41d4-a716-446655440502', '550e8400-e29b-41d4-a716-446655440000', 'facebook_url', 'https://facebook.com/vetorestaurant', 'url', 'Facebook', true, 10),
+('aa0e8400-e29b-41d4-a716-446655440503', '550e8400-e29b-41d4-a716-446655440000', 'instagram_url', 'https://instagram.com/vetorestaurant', 'url', 'Instagram', true, 11),
+('aa0e8400-e29b-41d4-a716-446655440504', '550e8400-e29b-41d4-a716-446655440000', 'twitter_url', 'https://x.com/vetorestaurant', 'url', 'Twitter / X', true, 12),
+('aa0e8400-e29b-41d4-a716-446655440505', '550e8400-e29b-41d4-a716-446655440000', 'tiktok_url', 'https://tiktok.com/@vetorestaurant', 'url', 'TikTok', true, 13),
+('aa0e8400-e29b-41d4-a716-446655440506', '550e8400-e29b-41d4-a716-446655440000', 'whatsapp_number', '+201050101098', 'phone', 'WhatsApp Number', true, 3),
+('aa0e8400-e29b-41d4-a716-446655440507', '550e8400-e29b-41d4-a716-446655440000', 'address', 'Gleem Bay / Montaza, Alexandria, Egypt', 'text', 'Address', true, 4),
+('aa0e8400-e29b-41d4-a716-446655440508', '550e8400-e29b-41d4-a716-446655440000', 'email', 'hello@veto-restaurant.com', 'email', 'Email', true, 5)
+ON CONFLICT (tenant_id, key) DO NOTHING;

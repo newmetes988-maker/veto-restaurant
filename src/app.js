@@ -23,6 +23,7 @@ const uploadRoutes = require('./routes/upload.routes');
 const eventRoutes = require('./routes/event.routes');
 const offerRoutes = require('./routes/offer.routes');
 const reviewRoutes = require('./routes/review.routes');
+const settingRoutes = require('./routes/setting.routes');
 const reservationController = require('./controllers/reservation.controller');
 const { migrate } = require('./controllers/migrate.controller');
 
@@ -109,6 +110,7 @@ app.use('/api/v1/admin/upload', uploadRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/offers', offerRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/settings', settingRoutes);
 
 // Direct QR check-in route (used by WhatsApp links & QR scans)
 app.get('/api/v1/check-in/:token', reservationController.checkIn);
