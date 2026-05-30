@@ -132,7 +132,7 @@ const migrate = async (req, res) => {
   const settingsSeed = await runQuery(`
     INSERT INTO settings (id, tenant_id, social_links, contact_phones, contact_email, address) VALUES
     ('550e8400-e29b-41d4-a716-446655440001', $1,
-     '{"facebook":"","twitter":"","tiktok":"","instagram":"","custom":[]}',
+     '{"facebook":"https://www.facebook.com/VetoLounge/?locale=ar_AR","twitter":"","tiktok":"https://www.tiktok.com/@veto.restaurant.cafe","instagram":"https://www.instagram.com/veto.cafe/?hl=ar","custom":[]}',
      '["01050101097","01050101098"]',
      'hello@veto.restaurant',
      'Gleembay / Montaza, Alexandria')
