@@ -53,7 +53,7 @@ const Footer = () => {
   const contactEmail = settings?.contactEmail || '';
   const address = settings?.address || '';
 
-  const hasSocial = Object.values(socialLinks).some((url) => url && url.trim() !== '');
+  const hasSocial = Object.values(socialLinks).some((url) => typeof url === 'string' && url.trim() !== '');
 
   return (
     <footer className="bg-brand-950 border-t border-brand-800/20">
@@ -136,7 +136,7 @@ const Footer = () => {
               <h4 className="text-xs font-medium text-brand-400 uppercase tracking-wider mb-3">Follow Us</h4>
               <div className="flex items-center justify-center sm:justify-start gap-3">
                 {Object.entries(socialLinks).map(([key, url]) => {
-                  if (!url || !url.trim()) return null;
+                  if (typeof url !== 'string' || !url.trim()) return null;
                   const Icon = socialIcons[key];
                   if (!Icon) return null;
                   return (
