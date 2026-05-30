@@ -312,10 +312,47 @@ const getReservationByQR = async (token) => {
   return result.rows[0];
 };
 
+/**
+ * Delete a single reservation by ID.
+ */
+const deleteReservation = async (id) => {
+  const result = await db.query(
+    'DELETE FROM reservations WHERE id = $1 AND tenant_id = $2 RETURNING id',
+    [id, DEFAULT_TENANT_ID]
+  );
+  if (result.rows.length === 0) {
+    throw new AppError('Reservation not found', 404);
+  }
+  return result.rows[0];
+};
+
+/**
+ * Delete multiple reservations by filter criteria.
+ */
+const deleteReservations = async (filters = {}) => {
+  const { status, dateFrom, dateTo } = filters;
+  let whereClauses = ['tenant_id = $1'];
+  let values = [DEFAULT_TENANT_ID];
+  let idx = 2;
+
+  if (status) { whereClauses.push(`status = $${idx++}`); values.push(status); }
+  if (dateFrom) { whereClauses.push(`scheduled_at >= $${idx++}`); values.push(dateFrom); }
+  if (dateTo) { whereClauses.push(`scheduled_at <= $${idx++}`); values.push(dateTo); }
+
+  const result = await db.query(
+    `DELETE FROM reservations WHERE ${whereClauses.join(' AND ')} RETURNING id`,
+    values
+  );
+
+  return { deletedCount: result.rows.length };
+};
+
 module.exports = {
   createReservation,
   getAllReservations,
   updateReservationStatus,
   verifyQRToken,
   getReservationByQR,
+  deleteReservation,
+  deleteReservations,
 };

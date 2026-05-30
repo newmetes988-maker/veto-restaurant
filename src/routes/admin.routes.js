@@ -45,4 +45,16 @@ router.patch(
   controller.updateStatus
 );
 
+router.delete(
+  '/reservations/:id',
+  restrictTo('owner', 'manager'),
+  controller.deleteReservation
+);
+
+router.delete(
+  '/reservations',
+  restrictTo('owner', 'manager'),
+  controller.deleteReservations
+);
+
 module.exports = router;

@@ -67,6 +67,40 @@ export const useReservations = () => {
     setPage(1);
   }, []);
 
+  const handleDelete = useCallback(async (id) => {
+    try {
+      const data = await api.delete(`/admin/reservations/${id}`);
+      if (data.status === 'success') {
+        setReservations((prev) => prev.filter((r) => r.id !== id));
+        setMeta((prev) => prev ? { ...prev, total: prev.total - 1 } : prev);
+        addToast('Reservation deleted', 'success');
+      } else {
+        addToast(data.message || 'Failed to delete', 'error');
+      }
+    } catch {
+      addToast('Network error', 'error');
+    }
+  }, [addToast]);
+
+  const handleClearAll = useCallback(async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.status) params.set('status', filters.status);
+      if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
+      if (filters.dateTo) params.set('dateTo', filters.dateTo);
+      const data = await api.delete(`/admin/reservations?${params.toString()}`);
+      if (data.status === 'success') {
+        setReservations([]);
+        setMeta((prev) => prev ? { ...prev, total: 0 } : prev);
+        addToast(`${data.data?.deletedCount || 0} reservations cleared`, 'success');
+      } else {
+        addToast(data.message || 'Failed to clear', 'error');
+      }
+    } catch {
+      addToast('Network error', 'error');
+    }
+  }, [addToast]);
+
   return {
     reservations,
     meta,
@@ -82,6 +116,8 @@ export const useReservations = () => {
     isUpdating,
     fetchReservations,
     handleStatusChange,
+    handleDelete,
+    handleClearAll,
     resetFilters,
   };
 };

@@ -39,7 +39,36 @@ const updateStatus = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * DELETE /api/v1/admin/reservations/:id
+ * Delete a single reservation.
+ */
+const deleteReservation = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  await reservationService.deleteReservation(id);
+  res.status(200).json({
+    status: 'success',
+    message: 'Reservation deleted successfully',
+  });
+});
+
+/**
+ * DELETE /api/v1/admin/reservations
+ * Bulk delete reservations by filter.
+ */
+const deleteReservations = catchAsync(async (req, res) => {
+  const { status, dateFrom, dateTo } = req.query;
+  const result = await reservationService.deleteReservations({ status, dateFrom, dateTo });
+  res.status(200).json({
+    status: 'success',
+    message: `${result.deletedCount} reservation(s) deleted`,
+    data: { deletedCount: result.deletedCount },
+  });
+});
+
 module.exports = {
   getAllReservations,
   updateStatus,
+  deleteReservation,
+  deleteReservations,
 };

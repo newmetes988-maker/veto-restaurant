@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StatusBadge from './StatusBadge';
-import { ChevronLeft, ChevronRight, Check, X, QrCode, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, X, QrCode, Loader2, Trash2 } from 'lucide-react';
 import { EmptyState } from '../ui/EmptyState';
 
 const ReservationTable = ({
@@ -8,6 +8,7 @@ const ReservationTable = ({
   meta,
   onPageChange,
   onStatusChange,
+  onDelete,
   isUpdating,
 }) => {
   const [expandedRow, setExpandedRow] = useState(null);
@@ -114,6 +115,18 @@ const ReservationTable = ({
                           Reject
                         </button>
                       </>
+                    )}
+                    {onDelete && (
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Delete this reservation?')) onDelete(r.id);
+                        }}
+                        className="p-2 rounded-lg transition-colors"
+                        style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}
+                        title="Delete"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     )}
                   </div>
                 </td>

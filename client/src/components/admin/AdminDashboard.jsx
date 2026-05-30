@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import {
   LogOut, Search, RefreshCw, Calendar, Users, Package, Layers,
   MessageSquare, Star, Percent, Ticket, Menu, X, Settings, Shield,
+  Download, Trash2, BarChart3,
 } from 'lucide-react';
 import { useReservations } from '../../hooks/useReservations';
 import { useAdminStore } from '../../store/useAdminStore';
+import { exportReservationsToCsv } from '../../utils/exportCsv';
 import ReservationTable from './ReservationTable';
+import { StatusPieChart, TimelineBarChart } from './ReservationCharts';
 import { SkeletonStats, SkeletonTable } from '../ui/Skeleton';
 import { EmptyState } from '../ui/EmptyState';
 
@@ -45,11 +48,14 @@ const AdminDashboard = ({ user, onLogout }) => {
     isUpdating,
     fetchReservations,
     handleStatusChange,
+    handleDelete,
+    handleClearAll,
     resetFilters,
   } = useReservations();
 
   const addToast = useAdminStore((state) => state.addToast);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [showCharts, setShowCharts] = useState(false);
 
   const stats = [
     {
@@ -271,8 +277,55 @@ const AdminDashboard = ({ user, onLogout }) => {
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
+            <button
+              onClick={() => setShowCharts(!showCharts)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-colors"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                color: 'rgba(255,255,255,0.50)',
+              }}
+            >
+              <BarChart3 className="w-4 h-4" /> Charts
+            </button>
+            <button
+              onClick={() => exportReservationsToCsv(reservations)}
+              disabled={reservations.length === 0}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-colors disabled:opacity-30"
+              style={{
+                background: 'rgba(212,175,55,0.08)',
+                border: '1px solid rgba(212,175,55,0.15)',
+                color: 'var(--color-text-gold)',
+              }}
+            >
+              <Download className="w-4 h-4" /> Export
+            </button>
+            <button
+              onClick={() => {
+                if (window.confirm(`Clear all ${statusFilter || 'reservations'}? This cannot be undone.`)) {
+                  handleClearAll(statusFilter ? { status: statusFilter } : {});
+                }
+              }}
+              disabled={reservations.length === 0}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-colors disabled:opacity-30"
+              style={{
+                background: 'rgba(239,68,68,0.08)',
+                border: '1px solid rgba(239,68,68,0.15)',
+                color: '#ef4444',
+              }}
+            >
+              <Trash2 className="w-4 h-4" /> Clear
+            </button>
           </div>
         </div>
+
+        {/* Charts */}
+        {showCharts && reservations.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
+            <StatusPieChart reservations={reservations} />
+            <TimelineBarChart reservations={reservations} />
+          </div>
+        )}
 
         {/* Table */}
         {isLoading && !reservations.length ? (
@@ -285,6 +338,7 @@ const AdminDashboard = ({ user, onLogout }) => {
             meta={meta}
             onPageChange={handlePageChange}
             onStatusChange={handleStatusChange}
+            onDelete={handleDelete}
             isUpdating={isUpdating}
           />
         )}
