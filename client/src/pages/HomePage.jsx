@@ -158,7 +158,7 @@ const EventsSection = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    {ev.price > 0 && (
+                    {ev.price != null && parseFloat(ev.price) > 0 && (
                       <span className="text-gold-400 font-semibold text-sm">{parseFloat(ev.price).toFixed(0)} EGP</span>
                     )}
                     <Link
@@ -230,7 +230,7 @@ const OffersSection = () => {
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${offer.is_featured ? 'bg-gold-500/15 border border-gold-500/20' : 'bg-brand-800/50 border border-brand-700/30'}`}>
                     <Percent className={`w-6 h-6 ${offer.is_featured ? 'text-gold-400' : 'text-brand-400'}`} />
                   </div>
-                  {offer.discount_percent > 0 && (
+                  {offer.discount_percent != null && parseInt(offer.discount_percent) > 0 && (
                     <span className={`text-3xl font-bold ${offer.is_featured ? 'text-gold-400' : 'text-white'}`}>
                       {offer.discount_percent}%
                     </span>
@@ -340,7 +340,7 @@ const ReviewsSection = () => {
                     <p className="text-brand-300 text-sm leading-relaxed mb-4">"{r.comment}"</p>
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-gold-500/10 border border-gold-500/20 flex items-center justify-center">
-                        <span className="text-gold-400 text-xs font-bold">{r.customer_name.charAt(0)}</span>
+                        <span className="text-gold-400 text-xs font-bold">{String(r.customer_name || '').charAt(0)}</span>
                       </div>
                       <span className="text-white text-xs font-medium">{r.customer_name}</span>
                     </div>

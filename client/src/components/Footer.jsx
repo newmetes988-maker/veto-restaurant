@@ -71,15 +71,15 @@ const Footer = () => {
           <div>
             <h4 className="text-xs font-medium text-brand-400 uppercase tracking-wider mb-3">Contact</h4>
             <div className="space-y-2">
-              {contactPhones.length > 0 ? (
-                contactPhones.map((phone, idx) => (
+              {Array.isArray(contactPhones) && contactPhones.filter(Boolean).length > 0 ? (
+                contactPhones.filter(Boolean).map((phone, idx) => (
                   <a
                     key={idx}
-                    href={`tel:+2${phone.replace(/^0/, '')}`}
+                    href={`tel:+2${String(phone).replace(/^0/, '')}`}
                     className="flex items-center justify-center sm:justify-start gap-2 text-brand-500 hover:text-gold-400 transition-colors text-sm"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    +20 {phone.replace(/^0/, '')}
+                    +20 {String(phone).replace(/^0/, '')}
                   </a>
                 ))
               ) : (

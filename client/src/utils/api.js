@@ -20,28 +20,37 @@ const authHeaders = (auth = true) => {
   return h;
 };
 
+const parseJson = async (response) => {
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  }
+  const text = await response.text();
+  return { status: 'error', message: text.slice(0, 200) };
+};
+
 export const api = {
   get: (path, auth = true) =>
-    fetch(`${API_BASE}${path}`, { headers: headers(auth) }).then((r) => r.json()),
+    fetch(`${API_BASE}${path}`, { headers: headers(auth) }).then(parseJson),
 
   post: (path, body, auth = true) =>
     fetch(`${API_BASE}${path}`, {
       method: 'POST',
       headers: headers(auth),
       body: JSON.stringify(body),
-    }).then((r) => r.json()),
+    }).then(parseJson),
 
   patch: (path, body, auth = true) =>
     fetch(`${API_BASE}${path}`, {
       method: 'PATCH',
       headers: headers(auth),
       body: JSON.stringify(body),
-    }).then((r) => r.json()),
+    }).then(parseJson),
 
   upload: (path, formData, auth = true) =>
     fetch(`${API_BASE}${path}`, {
       method: 'POST',
       headers: authHeaders(auth),
       body: formData,
-    }).then((r) => r.json()),
+    }).then(parseJson),
 };
