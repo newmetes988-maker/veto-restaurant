@@ -84,7 +84,7 @@ const EventsSection = () => {
   useEffect(() => {
     fetch('/api/v1/events?active=true')
       .then(r => r.json())
-      .then(d => { if (d.status === 'success') setEvents(d.data.events); })
+      .then(d => { if (d.status === 'success') setEvents(d.data?.events || []); })
       .finally(() => setLoading(false));
   }, []);
 
@@ -186,7 +186,7 @@ const OffersSection = () => {
   useEffect(() => {
     fetch('/api/v1/offers?active=true&featured=true')
       .then(r => r.json())
-      .then(d => { if (d.status === 'success') setOffers(d.data.offers); })
+      .then(d => { if (d.status === 'success') setOffers(d.data?.offers || []); })
       .finally(() => setLoading(false));
   }, []);
 
@@ -279,7 +279,7 @@ const ReviewsSection = () => {
   const fetchReviews = () => {
     fetch('/api/v1/reviews')
       .then(r => r.json())
-      .then(d => { if (d.status === 'success') setReviews(d.data.reviews); })
+      .then(d => { if (d.status === 'success') setReviews(d.data?.reviews || []); })
       .finally(() => setLoading(false));
   };
 
