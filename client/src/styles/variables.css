@@ -1,0 +1,68 @@
+:root {
+  /* === Brand Colors === */
+  --color-brand-50: #fdf8f6;
+  --color-brand-100: #f2e8e5;
+  --color-brand-200: #eaddd7;
+  --color-brand-300: #e0cec7;
+  --color-brand-400: #d2bab0;
+  --color-brand-500: #a77f6b;
+  --color-brand-600: #8a5a44;
+  --color-brand-700: #6d4535;
+  --color-brand-800: #4a2e23;
+  --color-brand-900: #2b1a14;
+  --color-brand-950: #1a0f0b;
+
+  /* === Gold Accent === */
+  --color-gold-300: #e8c868;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c5a028;
+  --color-gold-600: #b08d1e;
+
+  /* === Obsidian / Dark === */
+  --color-obsidian-50: #1a1a1a;
+  --color-obsidian-100: #141414;
+  --color-obsidian-200: #101010;
+  --color-obsidian-300: #0c0c0c;
+  --color-obsidian-400: #090909;
+  --color-obsidian-500: #070707;
+  --color-obsidian-600: #050505;
+  --color-obsidian-700: #040404;
+  --color-obsidian-800: #030303;
+  --color-obsidian-900: #020202;
+
+  /* === Semantic === */
+  --color-bg-primary: #050505;
+  --color-bg-secondary: #0a0a0a;
+  --color-bg-elevated: #111111;
+  --color-bg-glass: rgba(255, 255, 255, 0.03);
+  --color-border-default: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.10);
+  --color-border-gold: rgba(212, 175, 55, 0.20);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.60);
+  --color-text-muted: rgba(255, 255, 255, 0.35);
+  --color-text-gold: #d4af37;
+
+  /* === Status === */
+  --color-status-pending: #f59e0b;
+  --color-status-confirmed: #10b981;
+  --color-status-completed: #3b82f6;
+  --color-status-rejected: #ef4444;
+
+  /* === Shadows === */
+  --shadow-gold-sm: 0 0 10px rgba(212, 175, 55, 0.08);
+  --shadow-gold-md: 0 0 20px rgba(212, 175, 55, 0.10);
+  --shadow-gold-lg: 0 0 40px rgba(212, 175, 55, 0.12);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.40);
+
+  /* === Transitions === */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* === Radius === */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}

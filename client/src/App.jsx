@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { ToastContainer } from './components/ui/Toast';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ReservationForm from './components/ReservationForm';
@@ -68,6 +69,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<><Header /><HomePage /><Footer /></>} />
         <Route path="/reserve" element={<ReservePage />} />

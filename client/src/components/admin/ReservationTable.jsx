@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import StatusBadge from './StatusBadge';
 import { ChevronLeft, ChevronRight, Check, X, QrCode, Loader2 } from 'lucide-react';
+import { EmptyState } from '../ui/EmptyState';
 
 const ReservationTable = ({
   reservations,
@@ -26,9 +27,9 @@ const ReservationTable = ({
   return (
     <div className="space-y-4">
       {/* Desktop Table */}
-      <div className="hidden md:block overflow-hidden rounded-xl border border-brand-700/50">
+      <div className="hidden md:block overflow-hidden rounded-2xl border" style={{ borderColor: 'var(--color-border-default)' }}>
         <table className="w-full text-sm text-left">
-          <thead className="bg-brand-800/80 text-brand-300 uppercase text-xs tracking-wider">
+          <thead className="uppercase text-xs tracking-wider" style={{ background: 'rgba(255,255,255,0.02)', color: 'rgba(255,255,255,0.45)' }}>
             <tr>
               <th className="px-5 py-3.5 font-medium">Guest</th>
               <th className="px-5 py-3.5 font-medium">Contact</th>
@@ -38,37 +39,40 @@ const ReservationTable = ({
               <th className="px-5 py-3.5 font-medium text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-brand-700/30">
+          <tbody className="divide-y" style={{ borderColor: 'var(--color-border-default)' }}>
             {reservations.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-5 py-12 text-center text-brand-500">
-                  No reservations found.
+                <td colSpan={6} className="px-5 py-12">
+                  <EmptyState />
                 </td>
               </tr>
             )}
             {reservations.map((r) => (
               <tr
                 key={r.id}
-                className="bg-brand-800/20 hover:bg-brand-800/40 transition-colors"
+                className="transition-colors"
+                style={{ background: 'rgba(255,255,255,0.015)' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.015)'}
               >
                 <td className="px-5 py-4">
-                  <div className="font-medium text-white">{r.customer_name}</div>
+                  <div className="font-medium" style={{ color: 'var(--color-text-primary)' }}>{r.customer_name}</div>
                   {r.notes && (
-                    <div className="text-xs text-brand-500 mt-0.5 truncate max-w-[200px]">
+                    <div className="text-xs mt-0.5 truncate max-w-[200px]" style={{ color: 'var(--color-text-muted)' }}>
                       {r.notes}
                     </div>
                   )}
                 </td>
-                <td className="px-5 py-4 text-brand-300">
+                <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
                   <div>{r.customer_phone || '—'}</div>
-                  <div className="text-xs text-brand-500">{r.customer_email || '—'}</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{r.customer_email || '—'}</div>
                 </td>
-                <td className="px-5 py-4 text-brand-200">
+                <td className="px-5 py-4" style={{ color: 'rgba(255,255,255,0.70)' }}>
                   <div>{formatDate(r.scheduled_at)}</div>
-                  <div className="text-xs text-brand-500">{formatTime(r.scheduled_at)}</div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{formatTime(r.scheduled_at)}</div>
                 </td>
                 <td className="px-5 py-4">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-700/50 text-xs font-semibold text-white">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-semibold text-white" style={{ background: 'rgba(255,255,255,0.08)' }}>
                     {r.party_size}
                   </span>
                 </td>
@@ -80,7 +84,8 @@ const ReservationTable = ({
                     {r.qr_code && (
                       <button
                         onClick={() => setExpandedRow(expandedRow === r.id ? null : r.id)}
-                        className="p-2 rounded-lg bg-brand-700/40 hover:bg-brand-700/70 text-brand-300 transition-colors"
+                        className="p-2 rounded-lg transition-colors"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.50)' }}
                         title="View QR"
                       >
                         <QrCode className="w-4 h-4" />
@@ -120,13 +125,12 @@ const ReservationTable = ({
 
       {/* Mobile Cards */}
       <div className="md:hidden space-y-3">
-        {reservations.length === 0 && (
-          <div className="text-center py-12 text-brand-500">No reservations found.</div>
-        )}
+        {reservations.length === 0 && <EmptyState />}
         {reservations.map((r) => (
           <div
             key={r.id}
-            className="glass-panel p-4 space-y-3"
+            className="p-4 space-y-3 rounded-2xl backdrop-blur-sm border"
+            style={{ background: 'var(--color-bg-glass)', borderColor: 'var(--color-border-default)' }}
           >
             <div className="flex items-start justify-between">
               <div>
@@ -204,21 +208,31 @@ const ReservationTable = ({
       {/* Pagination */}
       {meta && meta.totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
-          <div className="text-sm text-brand-500">
+          <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             Page {meta.page} of {meta.totalPages} · {meta.total} total
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => onPageChange(meta.page - 1)}
               disabled={meta.page <= 1}
-              className="p-2 rounded-lg bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                color: 'rgba(255,255,255,0.50)',
+              }}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => onPageChange(meta.page + 1)}
               disabled={meta.page >= meta.totalPages}
-              className="p-2 rounded-lg bg-brand-800/50 text-brand-300 border border-brand-700/50 hover:bg-brand-700/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                color: 'rgba(255,255,255,0.50)',
+              }}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
