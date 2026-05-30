@@ -135,7 +135,8 @@ const login = catchAsync(async (req, res) => {
  */
 const getMe = catchAsync(async (req, res) => {
   const result = await db.query(
-    `SELECT first_name, last_name, role FROM admin_users WHERE id = $1`,
+    `SELECT id, email, first_name, last_name, role, phone, avatar_url, last_login_at, created_at
+     FROM admin_users WHERE id = $1`,
     [req.user.userId]
   );
 
@@ -149,9 +150,15 @@ const getMe = catchAsync(async (req, res) => {
     status: 'success',
     data: {
       user: {
+        id: user.id,
+        email: user.email,
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,
+        phone: user.phone,
+        avatarUrl: user.avatar_url,
+        lastLoginAt: user.last_login_at,
+        createdAt: user.created_at,
       },
     },
   });

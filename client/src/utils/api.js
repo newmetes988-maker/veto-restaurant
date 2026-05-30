@@ -47,6 +47,12 @@ export const api = {
       body: JSON.stringify(body),
     }).then(parseJson),
 
+  delete: (path, auth = true) =>
+    fetch(`${API_BASE}${path}`, {
+      method: 'DELETE',
+      headers: headers(auth),
+    }).then(parseJson),
+
   upload: (path, formData, auth = true) =>
     fetch(`${API_BASE}${path}`, {
       method: 'POST',
