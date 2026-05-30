@@ -5,6 +5,7 @@ const router = express.Router();
 const controller = require('../controllers/auth.controller');
 const validate = require('../middleware/validate');
 const { authenticate } = require('../middleware/auth');
+const { authLimiter } = require('../middleware/rateLimiter');
 
 const registerSchema = z.object({
   body: z.object({
@@ -23,8 +24,8 @@ const loginSchema = z.object({
   }),
 });
 
-router.post('/register', validate(registerSchema), controller.register);
-router.post('/login', validate(loginSchema), controller.login);
-router.get('/me', authenticate, controller.getMe);
+router.post('/register', authLimiter, validate(registerSchema), controller.register);
+router.post('/login', authLimiter, validate(loginSchema), controller.login);
+router.get('/me', authLimiter, authenticate, controller.getMe);
 
 module.exports = router;

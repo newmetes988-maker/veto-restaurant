@@ -28,4 +28,18 @@ const createReservationLimiter = rateLimit({
   },
 });
 
-module.exports = { apiLimiter, createReservationLimiter };
+/**
+ * Stricter limiter for auth endpoints to prevent brute-force / token probing.
+ */
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip || req.headers['x-forwarded-for'] || 'unknown',
+  handler: (req, res, next) => {
+    next(new AppError('Too many auth requests from this IP. Please try again later.', 429));
+  },
+});
+
+module.exports = { apiLimiter, createReservationLimiter, authLimiter };
