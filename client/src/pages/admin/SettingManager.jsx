@@ -26,7 +26,7 @@ const SettingManager = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.get('/admin/settings');
+      const data = await api.get('/settings');
       if (data.status === 'success') {
         const d = data.data;
         setSettings({
@@ -86,7 +86,7 @@ const SettingManager = () => {
         contactEmail: settings.contactEmail,
         address: settings.address,
       };
-      const data = await api.patch('/admin/settings', payload);
+      const data = await api.patch('/settings', payload);
       if (data.status === 'success') {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
